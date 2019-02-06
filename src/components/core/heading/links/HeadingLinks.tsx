@@ -16,7 +16,10 @@ export class HeadingLinks extends Component {
 
     linkBuilder = (route: NavigationRoute): React.ReactNode => {
         return (
-            <span className={style["padded-link"]}>
+            <span
+                key={route.path}
+                className={style["padded-link"]}
+            >
                 <Link to={route.path}>{route.display}</Link>
             </span>
         );

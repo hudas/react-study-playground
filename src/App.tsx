@@ -17,12 +17,12 @@ class App extends Component {
                 <Heading/>
 
                 <Switch>
-                    <Route exact path="/" render={Home}/>
+                    <Route exact path="/" component={Home}/>
                     <Route exact path="/customer/list" component={CustomerList} />
                     <Route exact path="/customer/new" component={CustomerForm} />
                     <Route exact path="/customer/edit/:id" component={CustomerForm} />
                     <Route exact path="/customer/:id" component={CustomerView} />
-                    <Route render={NotFound}/>
+                    <Route component={NotFound}/>
                 </Switch>
             </div>
         </Router>

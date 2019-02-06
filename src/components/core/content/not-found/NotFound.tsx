@@ -1,6 +1,6 @@
-import React, {ReactNode} from "react";
+import React from "react";
 
-export function NotFound(): ReactNode {
+export function NotFound() {
     return (
         <div>
             Resource not found.

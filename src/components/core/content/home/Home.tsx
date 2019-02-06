@@ -1,6 +1,6 @@
-import React, {ReactNode} from "react";
+import React from "react";
 
-export function Home(): ReactNode {
+export function Home() {
     return (
         <div>
             Home page.

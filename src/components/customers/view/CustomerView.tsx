@@ -1,11 +1,25 @@
-import React, { Component } from 'react';
+import React, {Component, ReactNode} from 'react';
+import {RouteComponentProps} from "react-router";
 
-export class CustomerView extends Component {
+interface CustomerViewRouteParams {
+    id: string;
+}
 
-    render(): React.ReactNode {
+export class CustomerView extends Component<RouteComponentProps<CustomerViewRouteParams>> {
+
+    constructor(props: any) {
+        super(props);
+
+        // this.state = {
+        //     customerId: props.match.params.id
+        // };
+    }
+
+    render(): ReactNode {
         return (
             <div>
-                Customer form
+                Customer view
+                { " " + this.props.match.params.id }
             </div>
         );
     }
