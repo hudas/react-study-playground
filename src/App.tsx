@@ -3,31 +3,69 @@ import {BrowserRouter as Router, Route, Link, Switch} from "react-router-dom";
 
 import './App.scss';
 import {Heading} from "./components/core/heading/Heading";
-import {CustomerList} from "./components/customers/list/CustomerList";
-import {CustomerForm} from "./components/customers/form/CustomerForm";
-import {CustomerView} from "./components/customers/view/CustomerView";
-import {Home} from "./components/core/content/home/Home";
-import {NotFound} from "./components/core/content/not-found/NotFound";
+import {CustomersRouter} from "./components/customers/router/CustomersRouter";
+import {ContentLayout} from "./components/core/layout/content/ContentLayout";
+import {AuthLayout} from "./components/core/layout/auth/AuthLayout";
+import {Login, LoginEvent} from "./components/core/auth/Login";
 
-class App extends Component {
-  render() {
-    return (
-        <Router>
-            <div className="App">
-                <Heading/>
 
-                <Switch>
-                    <Route exact path="/" component={Home}/>
-                    <Route exact path="/customer/list" component={CustomerList} />
-                    <Route exact path="/customer/new" component={CustomerForm} />
-                    <Route exact path="/customer/edit/:id" component={CustomerForm} />
-                    <Route exact path="/customer/:id" component={CustomerView} />
-                    <Route component={NotFound}/>
-                </Switch>
-            </div>
-        </Router>
-    );
-  }
+interface AppState {
+    auth: AuthState;
+}
+
+export interface AuthState {
+    loggedIn: boolean;
+    role?: string;
+}
+
+class App extends Component<any, AppState> {
+
+    constructor(props: any) {
+        super(props);
+        this.state = {
+            auth: {
+                loggedIn: false,
+                role: undefined
+            }
+        };
+    }
+
+    loginHandler = (event: LoginEvent) => {
+        this.setState({
+            auth: {
+                loggedIn: true,
+                role: event.role
+            }
+        })
+    };
+
+    logoutHandler = () => {
+        this.setState({
+            auth: {
+                loggedIn: false,
+                role: undefined
+            }
+        })
+    };
+
+    render() {
+        return (
+          <Router>
+              {
+                  !this.state.auth.loggedIn ? (
+                    <AuthLayout>
+                        <Login onLogin={this.loginHandler}/>
+                    </AuthLayout>
+                  ) : (
+                    <ContentLayout>
+                        <button onClick={this.logoutHandler}>Logout</button>
+                        <CustomersRouter auth={this.state.auth}/>
+                    </ContentLayout>
+                  )
+              }
+          </Router>
+        );
+    }
 }
 
 export default App;
