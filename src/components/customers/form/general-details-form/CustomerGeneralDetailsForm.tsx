@@ -2,9 +2,10 @@ import {Component} from "react";
 import {Moment} from "moment";
 import React from "react";
 import {FormPanel} from "../../../lib/panels/form-panel/FormPanel";
-import {TextField, Typography} from "@material-ui/core";
+import {TextField} from "@material-ui/core";
 import style from "./CustomerGeneralDetailsForm.module.scss";
 import {DatePicker} from "material-ui-pickers";
+import axios from 'axios';
 
 export interface GeneralDetailsCustomerFormState {
   firstName?: string;
