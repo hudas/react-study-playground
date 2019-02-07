@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import {Link} from "react-router-dom";
 import {Button, Paper, Table, TableBody, TableCell, TableHead, TableRow, Typography} from "@material-ui/core";
 import style from "./CustomerList.module.scss";
+import {EmbeddedButton} from "../../lib/buttons/EmbeddedButton";
+import {TablePanel} from "../../lib/panels/TablePanel";
 
 interface CustomerRow {
     id: string;
@@ -43,10 +45,7 @@ export class CustomerList extends Component {
         return (
             <>
                 <Typography variant="headline">Customers</Typography>
-                <Paper
-                  className={style["table-panel"]}
-                  square={true}
-                  elevation={2}>
+                <TablePanel>
                     <Table>
                         <TableHead>
                             <TableRow>
@@ -65,15 +64,15 @@ export class CustomerList extends Component {
                                   <TableCell>{row.address}</TableCell>
                                   <TableCell>{row.subscriptions.join('\n')}</TableCell>
                                   <TableCell>
-                                      <Button color="primary">
+                                      <EmbeddedButton>
                                           <Link to={`/customer/${row.id}`}>View</Link>
-                                      </Button>
+                                      </EmbeddedButton>
                                   </TableCell>
                               </TableRow>
                             ))}
                         </TableBody>
                     </Table>
-                </Paper>
+                </TablePanel>
             </>
         );
     }

@@ -2,6 +2,8 @@ import React, {Component} from "react";
 import {Button, Paper, Table, TableBody, TableCell, TableHead, TableRow, Typography} from "@material-ui/core";
 import style from "../../customers/list/CustomerList.module.scss";
 import {Link} from "react-router-dom";
+import {EmbeddedButton} from "../../lib/buttons/EmbeddedButton";
+import {TablePanel} from "../../lib/panels/TablePanel";
 
 enum OrderStatus {
   NEW = 'NEW',
@@ -51,10 +53,7 @@ export class OrderList extends Component {
     return (
       <>
         <Typography variant="headline">Orders</Typography>
-        <Paper
-          className={style["table-panel"]}
-          square={true}
-          elevation={2}>
+        <TablePanel>
           <Table>
             <TableHead>
               <TableRow>
@@ -77,15 +76,15 @@ export class OrderList extends Component {
                   <TableCell>{row.activateAt.toDateString()}</TableCell>
                   <TableCell>{row.status}</TableCell>
                   <TableCell>
-                    <Button color="primary">
+                    <EmbeddedButton>
                       <Link to={`/order/${row.id}`}>View</Link>
-                    </Button>
+                    </EmbeddedButton>
                   </TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
-        </Paper>
+        </TablePanel>
       </>
     );
   }

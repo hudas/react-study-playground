@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React from 'react';
 import style from './Heading.module.scss';
 import {Logo} from "./logo/Logo";
 import {HeadingLinks} from "./links/HeadingLinks";
-import {Button} from "@material-ui/core";
+import {PrimaryButton} from "../../lib/buttons/PrimaryButton";
 
 export interface HeadingProps {
   onLogout: () => void;
@@ -16,13 +16,9 @@ export function Heading({ onLogout }: HeadingProps) {
         <h1 className="title">Study app heading</h1>
         <HeadingLinks/>
       </div>
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={onLogout}
-      >
+      <PrimaryButton onClick={onLogout}>
         Logout
-      </Button>
+      </PrimaryButton>
     </div>
   );
 }
