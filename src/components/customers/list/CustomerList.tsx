@@ -3,7 +3,7 @@ import {Link} from "react-router-dom";
 import {Button, Paper, Table, TableBody, TableCell, TableHead, TableRow, Typography} from "@material-ui/core";
 import style from "./CustomerList.module.scss";
 import {EmbeddedButton} from "../../lib/buttons/EmbeddedButton";
-import {TablePanel} from "../../lib/panels/TablePanel";
+import {TablePanel} from "../../lib/panels/table-panel/TablePanel";
 
 interface CustomerRow {
     id: string;

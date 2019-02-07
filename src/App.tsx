@@ -6,6 +6,8 @@ import {ContentLayout} from "./components/core/layout/content/ContentLayout";
 import {AuthLayout} from "./components/core/layout/auth/AuthLayout";
 import {Login, LoginEvent} from "./components/core/auth/Login";
 import {AppRouter} from "./components/core/routing/AppRouter";
+import {MuiPickersUtilsProvider} from "material-ui-pickers";
+import MomentUtils from "@date-io/moment";
 
 
 interface AppState {
@@ -49,19 +51,21 @@ class App extends Component<any, AppState> {
 
     render() {
         return (
-          <Router>
-              {
-                  !this.state.auth.loggedIn ? (
-                    <AuthLayout>
-                        <Login onLogin={this.loginHandler}/>
-                    </AuthLayout>
-                  ) : (
-                    <ContentLayout onLogout={this.logoutHandler}>
-                        <AppRouter auth={this.state.auth}/>
-                    </ContentLayout>
-                  )
-              }
-          </Router>
+          <MuiPickersUtilsProvider utils={MomentUtils}>
+              <Router>
+                  {
+                      !this.state.auth.loggedIn ? (
+                        <AuthLayout>
+                            <Login onLogin={this.loginHandler}/>
+                        </AuthLayout>
+                      ) : (
+                        <ContentLayout onLogout={this.logoutHandler}>
+                            <AppRouter auth={this.state.auth}/>
+                        </ContentLayout>
+                      )
+                  }
+              </Router>
+          </MuiPickersUtilsProvider>
         );
     }
 }

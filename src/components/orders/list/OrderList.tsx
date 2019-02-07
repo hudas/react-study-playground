@@ -3,7 +3,7 @@ import {Button, Paper, Table, TableBody, TableCell, TableHead, TableRow, Typogra
 import style from "../../customers/list/CustomerList.module.scss";
 import {Link} from "react-router-dom";
 import {EmbeddedButton} from "../../lib/buttons/EmbeddedButton";
-import {TablePanel} from "../../lib/panels/TablePanel";
+import {TablePanel} from "../../lib/panels/table-panel/TablePanel";
 
 enum OrderStatus {
   NEW = 'NEW',

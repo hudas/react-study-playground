@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {AuthState} from "../../../../App";
 
-export function withGuard(GuardedComponent: React.ComponentType, allowedRoles: string[], auth: AuthState) {
+export function withGuard(GuardedComponent: React.ComponentType<any>, allowedRoles: string[], auth: AuthState) {
 
     return class extends Component {
 
