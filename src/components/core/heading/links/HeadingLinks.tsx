@@ -8,8 +8,10 @@ interface NavigationRoute {
 }
 
 const navigationRoutes: NavigationRoute[] = [
-    { path: '/customer/new', display: 'New' },
-    { path: '/customer/list', display: 'List' },
+    { path: '/customer/new', display: 'New customer' },
+    { path: '/customer/list', display: 'Customers list' },
+    { path: '/order/new', display: 'New order' },
+    { path: '/order/list', display: 'Orders list' },
 ];
 
 export class HeadingLinks extends Component {
