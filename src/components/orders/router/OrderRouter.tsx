@@ -5,9 +5,9 @@ import {OrderForm} from "../form/OrderForm";
 import {OrderList} from "../list/OrderList";
 import {OrderView} from "../view/OrderView";
 import {NotFound} from "../../core/content/not-found/NotFound";
-import {AppRouterProps} from "../../core/routing/AppRouter";
+import {AppRoutedComponentProps} from "../../core/routing/AppRouter";
 
-export function OrderRouter({ auth, match }: AppRouterProps) {
+export function OrderRouter({ auth, match }: AppRoutedComponentProps) {
   return (
     <div>
       <Switch>

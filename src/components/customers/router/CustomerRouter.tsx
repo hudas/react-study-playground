@@ -1,4 +1,3 @@
-import {Component} from "react";
 import {Redirect, Route, Switch} from "react-router";
 import {withGuard} from "../../core/content/guard/RouteGuard";
 import {CustomerList} from "../list/CustomerList";
@@ -6,9 +5,9 @@ import {CustomerForm} from "../form/CustomerForm";
 import {CustomerView} from "../view/CustomerView";
 import {NotFound} from "../../core/content/not-found/NotFound";
 import React from "react";
-import {AppRouterProps} from "../../core/routing/AppRouter";
+import {AppRoutedComponentProps} from "../../core/routing/AppRouter";
 
-export function CustomerRouter({ auth, match }: AppRouterProps) {
+export function CustomerRouter({ auth, match }: AppRoutedComponentProps) {
   return (
     <div>
       <Switch>

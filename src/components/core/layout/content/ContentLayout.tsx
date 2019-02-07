@@ -1,16 +1,12 @@
-import React, {Component, ReactNode} from "react";
+import React, {Component, ComponentProps, ComponentPropsWithoutRef, ReactNode} from "react";
 import style from "./ContentLayout.module.scss";
 import {Heading} from "../../heading/Heading";
 
-
-export class ContentLayout extends Component {
-
-  render(): ReactNode {
-    return (
-      <div className={style.container}>
-        <Heading/>
-        {this.props.children}
-      </div>
-    );
-  }
+export function ContentLayout({ children, onLogout }: any) {
+  return (
+    <div className={style.container}>
+      <Heading onLogout={onLogout}/>
+      {children}
+    </div>
+  );
 }

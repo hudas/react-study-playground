@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import style from "./Login.module.scss";
 import {FakeLoginForm} from "./form/FakeLoginForm";
 import {LoginFormNotice} from "./notice/LoginFormNotice";
+import Button from '@material-ui/core/Button';
 
 export interface LoginEvent {
   role: string;
@@ -32,10 +33,22 @@ export class Login extends Component<LoginComponentProps> {
 
         <div className={style.buttons}>
           <div>
-            <button onClick={this.loginHandlerBuilder('GUEST')}>Login as Guest</button>
+            <Button
+              color="primary"
+              variant="contained"
+              onClick={this.loginHandlerBuilder('GUEST')}
+            >
+              Login as Guest
+            </Button>
           </div>
           <div>
-            <button onClick={this.loginHandlerBuilder('ADMIN')}>Login as Admin</button>
+            <Button
+              color="primary"
+              variant="contained"
+              onClick={this.loginHandlerBuilder('ADMIN')}
+            >
+              Login as Admin
+            </Button>
           </div>
         </div>
       </div>

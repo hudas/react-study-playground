@@ -1,8 +1,8 @@
-import {Component} from "react";
+import React, {Component, ReactNode} from "react";
 
 export class OrderView extends Component {
 
-  render(): React.ReactNode {
+  render(): ReactNode {
     return <div>Order view renders</div>;
   }
 }
