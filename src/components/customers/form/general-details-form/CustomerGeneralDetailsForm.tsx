@@ -5,7 +5,8 @@ import {FormPanel} from "../../../lib/panels/form-panel/FormPanel";
 import {TextField} from "@material-ui/core";
 import style from "./CustomerGeneralDetailsForm.module.scss";
 import {DatePicker} from "material-ui-pickers";
-import axios from 'axios';
+import {PrimaryButton} from "../../../lib/buttons/PrimaryButton";
+import {Link} from "react-router-dom";
 
 export interface GeneralDetailsCustomerFormState {
   firstName?: string;
@@ -15,8 +16,9 @@ export interface GeneralDetailsCustomerFormState {
 }
 
 export interface GeneralDetailsFormProps {
-  onChange: (data: GeneralDetailsCustomerFormState) => void;
   value: GeneralDetailsCustomerFormState;
+  onChange?: (data: GeneralDetailsCustomerFormState) => void;
+  disabled?: boolean;
 }
 
 export class CustomerGeneralDetailsForm extends Component<GeneralDetailsFormProps> {
@@ -45,6 +47,7 @@ export class CustomerGeneralDetailsForm extends Component<GeneralDetailsFormProp
             label="First name"
             margin="normal"
             className={style["first-name-field"]}
+            disabled={this.props.disabled}
             value={this.props.value.firstName}
             onChange={this.changeHandler('firstName')}
           />
@@ -54,6 +57,7 @@ export class CustomerGeneralDetailsForm extends Component<GeneralDetailsFormProp
             label="Last name"
             margin="normal"
             className={style["last-name-field"]}
+            disabled={this.props.disabled}
             value={this.props.value.lastName}
             onChange={this.changeHandler('lastName')}
           />
@@ -63,6 +67,7 @@ export class CustomerGeneralDetailsForm extends Component<GeneralDetailsFormProp
             label="Address"
             margin="normal"
             className={style["address-field"]}
+            disabled={this.props.disabled}
             value={this.props.value.address}
             onChange={this.changeHandler('address')}
           />
@@ -71,6 +76,7 @@ export class CustomerGeneralDetailsForm extends Component<GeneralDetailsFormProp
             label="Birth date"
             keyboard={false}
             className={style["birthday-field"]}
+            disabled={this.props.disabled}
             value={this.props.value.birthDate}
             onChange={this.dateChangeHandler('birthDate')}
           />
@@ -85,6 +91,6 @@ export class CustomerGeneralDetailsForm extends Component<GeneralDetailsFormProp
       [field]: changedValue,
     };
 
-    this.props.onChange(updatedDetails);
+    this.props.onChange && this.props.onChange(updatedDetails);
   }
 }
