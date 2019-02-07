@@ -1,22 +1,20 @@
 import React, { Component } from 'react';
 import {RouteComponentProps} from "react-router";
-import {Checkbox, FormControlLabel, TextField, Typography} from "@material-ui/core";
+import {Typography} from "@material-ui/core";
 import {PrimaryButton} from "../../lib/buttons/PrimaryButton";
-import {DatePicker} from "material-ui-pickers";
-import style from "./CustomerForm.module.scss";
-import {FormPanel} from "../../lib/panels/form-panel/FormPanel";
-import {Moment} from "moment";
+import {
+    CustomerGeneralDetailsForm,
+    GeneralDetailsCustomerFormState
+} from "./general-details-form/CustomerGeneralDetailsForm";
+import {CustomerConsentFormState, CustomerConsentsForm} from "./consents-form/CustomerConsentsForm";
 
 interface CustomerFormRouteParams {
     id: string;
 }
 
-interface CustomerFormState {
-    firstName?: string;
-    lastName?: string;
-    birthDate?: Moment | null;
-    address?: string;
-    marketingConsent?: boolean;
+export interface CustomerFormState
+  extends GeneralDetailsCustomerFormState, CustomerConsentFormState {
+
 }
 
 export class CustomerForm extends Component<RouteComponentProps<CustomerFormRouteParams>, CustomerFormState> {
@@ -28,7 +26,7 @@ export class CustomerForm extends Component<RouteComponentProps<CustomerFormRout
             lastName: '',
             birthDate: null,
             address: '',
-            marketingConsent: false
+            consents: {}
         }
     }
 
@@ -37,96 +35,43 @@ export class CustomerForm extends Component<RouteComponentProps<CustomerFormRout
         event.preventDefault();
     };
 
-    changeHandler = (field: keyof CustomerFormState) => {
-        return (event: any) => {
-            const targetInput = event.target;
-            const newValue = targetInput.type === 'checkbox' ? targetInput.checked : targetInput.value;
-
-            this.setState({
-                [field]: newValue
-            });
-        }
-    };
-
-    dateChangeHandler = (field: keyof CustomerFormState) => {
-        return (date: Moment) => {
-            this.setState({ [field]: date });
-        };
+    changeHandler = (subFormValue: Partial<CustomerFormState>) => {
+        this.setState({
+            ...this.state,
+            ...subFormValue
+        });
     };
 
     render(): React.ReactNode {
         const existingCustomer = !!this.props.match.params.id;
 
         const formlabel = existingCustomer ? (
-          "Customer form  " + this.props.match.params.id
+          "Customer  " + this.props.match.params.id
         ) : (
-          "New customer form"
+          "New customer"
         );
 
         return (
-            <div>
-                <FormPanel>
-                    <Typography variant="headline" color="primary">
-                        {formlabel}
-                    </Typography>
-                    <form
-                      noValidate
-                      onSubmit={this.submitHandler}
-                    >
+          <div>
+              <Typography variant="headline" color="primary">
+                  {formlabel}
+              </Typography>
+              <CustomerGeneralDetailsForm
+                value={this.state}
+                onChange={this.changeHandler}
+              />
+              <CustomerConsentsForm
+                value={this.state}
+                onChange={this.changeHandler}
+              />
 
-                        <div className={style["form-container"]}>
-                            <TextField
-                              id="firstName"
-                              label="First name"
-                              margin="normal"
-                              className={style["first-name-field"]}
-                              value={this.state.firstName}
-                              onChange={this.changeHandler('firstName')}
-                            />
-
-                            <TextField
-                              id="lastName"
-                              label="Last name"
-                              margin="normal"
-                              className={style["last-name-field"]}
-                              value={this.state.lastName}
-                              onChange={this.changeHandler('lastName')}
-                            />
-
-                            <TextField
-                              id="address"
-                              label="Address"
-                              margin="normal"
-                              className={style["address-field"]}
-                              value={this.state.address}
-                              onChange={this.changeHandler('address')}
-                            />
-
-                            <DatePicker
-                              label="Birth date"
-                              keyboard={false}
-                              className={style["birthday-field"]}
-                              value={this.state.birthDate}
-                              onChange={this.dateChangeHandler('birthDate')}
-                            />
-
-                            <FormControlLabel
-                              className={style["consent-field"]}
-                              control={
-                                  <Checkbox
-                                    checked={this.state.marketingConsent}
-                                    onChange={this.changeHandler('marketingConsent')}
-                                    value="marketingConsent"
-                                  />
-                              }
-                              label="Allow personal data usage for marketing purposes"
-                            />
-                        </div>
-
-                        <PrimaryButton type="submit">Submit</PrimaryButton>
-                    </form>
-                </FormPanel>
-            </div>
+              <form
+                noValidate
+                onSubmit={this.submitHandler}
+              >
+                  <PrimaryButton type="submit">Submit</PrimaryButton>
+              </form>
+          </div>
         );
     }
 }

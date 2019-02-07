@@ -6,8 +6,8 @@
   grid-gap: 10px;
 
   grid-template-areas:
-    "first-name last-name address ."
-    "birthday   consent   consent .";
+          "first-name last-name address ."
+          "birthday   .         .       .";
 
   .first-name-field {
     grid-area: first-name;
@@ -23,9 +23,5 @@
 
   .birthday-field {
     grid-area: birthday;
-  }
-
-  .consent-field {
-    grid-area: consent;
   }
 }
