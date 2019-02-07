@@ -1,27 +1,16 @@
 import React, {Component} from "react";
+import {AuthState} from "../../../../App";
 
-interface ProtectedContentProps {
-    requiredRole: string
-}
+export function withGuard(GuardedComponent: React.ComponentType, allowedRoles: string[], auth: AuthState) {
 
-export class RouteGuard extends Component<any> {
+    return class extends Component {
 
-    constructor(props: any) {
-        super(props);
+        render(): React.ReactNode {
+            if (!auth.loggedIn || !auth.role || !allowedRoles.includes(auth.role)) {
+                return <div>Content is not available</div>
+            }
 
-    }
-
-    render(): React.ReactNode {
-        return (
-            <div>
-                {
-                    this.props.auth.loggedIn && this.props.allowedRoles.includes(this.props.auth.role) ? (
-                        this.props.children
-                    ) : (
-                        "Content is not available"
-                    )
-                }
-            </div>
-        );
+            return <GuardedComponent {...this.props}/>;
+        }
     }
 }

@@ -12,10 +12,17 @@ export class CustomerForm extends Component<RouteComponentProps<CustomerFormRout
     }
 
     render(): React.ReactNode {
+        const existingCustomer = !!this.props.match.params.id;
+
         return (
             <div>
-                Customer form
-                { " " + this.props.match.params.id }
+                {
+                    existingCustomer ? (
+                      "Customer form  " + this.props.match.params.id
+                    ) : (
+                      "New customer form"
+                    )
+                }
             </div>
         );
     }
