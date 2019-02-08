@@ -1,7 +1,7 @@
 import {Component} from "react";
 import React from "react";
-import {Checkbox, FormControlLabel} from "@material-ui/core";
 import {FormPanel} from "../../../lib/panels/form-panel/FormPanel";
+import {ConsentSelectionBox, SelectionChangeEvent} from "./consent-selection-box/ConsentSelectionBox";
 
 interface RequiredConsent {
   id: string;
@@ -30,27 +30,18 @@ export interface ConsentFormProps {
 
 export class CustomerConsentsForm extends Component<ConsentFormProps> {
 
-  changeHandler = (consentId: string) => {
-    return (event: any) => {
-      const targetInput = event.target;
-      const newValue = targetInput.checked;
-
-      this.emitConsentChange(consentId, newValue);
-    }
+  changeHandler = (event: SelectionChangeEvent) => {
+    this.emitConsentChange(event.id, event.value);
   };
 
-  consentRenderer = (selection: ConsentSelection) => {
+  selectionRenderer = (selection: ConsentSelection) => {
     return (consent: RequiredConsent) => {
       return (
-        <FormControlLabel
+        <ConsentSelectionBox
           key={consent.id}
-          control={
-            <Checkbox
-              checked={selection[consent.id] || false}
-              onChange={this.changeHandler(consent.id)}
-            />
-          }
-          label={consent.description}
+          item={consent}
+          selected={selection[consent.id] || false}
+          onChange={this.changeHandler}
         />
       );
     }
@@ -58,7 +49,9 @@ export class CustomerConsentsForm extends Component<ConsentFormProps> {
 
   render(): React.ReactNode {
     return (
-      <FormPanel title="Consents">{requiredConsents.map(this.consentRenderer(this.props.value.consents))}</FormPanel>
+      <FormPanel title="Consents">
+        {requiredConsents.map(this.selectionRenderer(this.props.value.consents))}
+      </FormPanel>
     );
   }
 

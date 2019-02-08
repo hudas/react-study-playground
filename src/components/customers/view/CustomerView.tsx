@@ -22,10 +22,7 @@ export class CustomerView extends Component<RouteComponentProps<CustomerViewRout
 
     constructor(props: any) {
         super(props);
-        this.state = {
-            details: {},
-            redirectToEdit: false
-        }
+        this.initViewState();
     }
 
     editClickHandler = () => {
@@ -56,5 +53,17 @@ export class CustomerView extends Component<RouteComponentProps<CustomerViewRout
               {this.state.redirectToEdit && <Redirect to={`/customer/edit/${this.props.match.params.id}`}/>}
           </div>
         );
+    }
+
+    private initViewState() {
+        this.state = {
+            details: {
+                firstName: '',
+                lastName: '',
+                birthDate: null,
+                address: ''
+            },
+            redirectToEdit: false
+        }
     }
 }
