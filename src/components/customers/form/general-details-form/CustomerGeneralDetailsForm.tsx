@@ -5,8 +5,6 @@ import {FormPanel} from "../../../lib/panels/form-panel/FormPanel";
 import {TextField} from "@material-ui/core";
 import style from "./CustomerGeneralDetailsForm.module.scss";
 import {DatePicker} from "material-ui-pickers";
-import {PrimaryButton} from "../../../lib/buttons/PrimaryButton";
-import {Link} from "react-router-dom";
 
 export interface GeneralDetailsCustomerFormState {
   firstName?: string;
