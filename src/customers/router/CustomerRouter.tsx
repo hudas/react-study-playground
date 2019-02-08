@@ -1,11 +1,11 @@
 import {Redirect, Route, Switch} from "react-router";
-import {withGuard} from "../../core/content/guard/RouteGuard";
+import {withGuard} from "../../core/components/content/guard/RouteGuard";
 import {CustomerList} from "../components/list/CustomerList";
 import {CustomerForm} from "../components/form/CustomerForm";
 import {CustomerView} from "../components/view/CustomerView";
-import {NotFound} from "../../core/content/not-found/NotFound";
+import {NotFound} from "../../core/components/content/not-found/NotFound";
 import React from "react";
-import {AppRoutedComponentProps} from "../../core/routing/AppRouter";
+import {AppRoutedComponentProps} from "../../core/router/AppRouter";
 
 export function CustomerRouter({ auth, match }: AppRoutedComponentProps) {
   return (

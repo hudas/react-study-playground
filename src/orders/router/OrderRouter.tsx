@@ -1,11 +1,11 @@
 import {Redirect, Route, Switch} from "react-router";
 import * as React from "react";
-import {withGuard} from "../../core/content/guard/RouteGuard";
+import {withGuard} from "../../core/components/content/guard/RouteGuard";
 import {OrderForm} from "../form/OrderForm";
 import {OrderList} from "../list/OrderList";
 import {OrderView} from "../view/OrderView";
-import {NotFound} from "../../core/content/not-found/NotFound";
-import {AppRoutedComponentProps} from "../../core/routing/AppRouter";
+import {NotFound} from "../../core/components/content/not-found/NotFound";
+import {AppRoutedComponentProps} from "../../core/router/AppRouter";
 
 export function OrderRouter({ auth, match }: AppRoutedComponentProps) {
   return (

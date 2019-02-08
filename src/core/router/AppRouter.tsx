@@ -1,8 +1,8 @@
 import {Route, RouteComponentProps, Switch} from "react-router";
-import {AuthState} from "../../../App";
-import {Home} from "../content/home/Home";
+import {AuthState} from "../../App";
+import {Home} from "../components/content/home/Home";
 import {CustomerRouter} from "../../customers/router/CustomerRouter";
-import {NotFound} from "../content/not-found/NotFound";
+import {NotFound} from "../components/content/not-found/NotFound";
 import React from "react";
 import {OrderRouter} from "../../orders/router/OrderRouter";
 

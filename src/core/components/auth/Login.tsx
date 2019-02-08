@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import style from "./Login.module.scss";
 import {FakeLoginForm} from "./form/FakeLoginForm";
 import {LoginFormNotice} from "./notice/LoginFormNotice";
-import {PrimaryButton} from "../../lib/buttons/PrimaryButton";
+import {PrimaryButton} from "../../../lib/buttons/PrimaryButton";
 
 export interface LoginEvent {
   role: string;

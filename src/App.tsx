@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import {BrowserRouter as Router} from "react-router-dom";
 
 import './App.scss';
-import {ContentLayout} from "./components/core/layout/content/ContentLayout";
-import {AuthLayout} from "./components/core/layout/auth/AuthLayout";
-import {Login, LoginEvent} from "./components/core/auth/Login";
-import {AppRouter} from "./components/core/routing/AppRouter";
+import {ContentLayout} from "./core/components/layout/content/ContentLayout";
+import {AuthLayout} from "./core/components/layout/auth/AuthLayout";
+import {Login, LoginEvent} from "./core/components/auth/Login";
+import {AppRouter} from "./core/router/AppRouter";
 import {MuiPickersUtilsProvider} from "material-ui-pickers";
 import MomentUtils from "@date-io/moment";
 
