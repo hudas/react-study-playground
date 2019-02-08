@@ -1,6 +1,6 @@
 import {CustomerRow} from "../CustomerList";
 import {TableCell, TableRow} from "@material-ui/core";
-import {EmbeddedButton} from "../../../lib/buttons/EmbeddedButton";
+import {EmbeddedButton} from "../../../../lib/buttons/EmbeddedButton";
 import {Link} from "react-router-dom";
 import React from "react";
 

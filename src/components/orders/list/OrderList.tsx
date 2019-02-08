@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import {Button, Paper, Table, TableBody, TableCell, TableHead, TableRow, Typography} from "@material-ui/core";
-import style from "../../customers/list/CustomerList.module.scss";
+import style from "../../customers/components/list/CustomerList.module.scss";
 import {Link} from "react-router-dom";
 import {EmbeddedButton} from "../../lib/buttons/EmbeddedButton";
 import {TablePanel} from "../../lib/panels/table-panel/TablePanel";

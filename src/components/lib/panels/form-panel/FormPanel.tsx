@@ -6,7 +6,7 @@ export function FormPanel({ children, title }: any) {
   return (
     <Paper
       className={style.container}
-      square={true}
+      square
       elevation={2}>
       <Typography variant="headline" color="primary">
         {title}

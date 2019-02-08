@@ -1,13 +1,9 @@
 import React, {Component, ReactNode} from 'react';
 import {Table, TableBody, TableHead, Typography} from "@material-ui/core";
-import {TablePanel} from "../../lib/panels/table-panel/TablePanel";
-import axios, {AxiosResponse} from "axios";
+import {TablePanel} from "../../../lib/panels/table-panel/TablePanel";
 import {CustomerListRow} from "./list-row/CustomerListRow";
 import {CustomerListColumnHeadings} from "./list-columns/CustomerListColumnHeadings";
-
-interface CustomerListState {
-    rows: CustomerRow[];
-}
+import * as service from "../../services/CustomerService";
 
 export interface CustomerRow {
     id: string;
@@ -17,13 +13,19 @@ export interface CustomerRow {
     subscriptions: string[];
 }
 
+interface CustomerListState {
+    rows: CustomerRow[];
+}
+
+const INITIAL_STATE: CustomerListState = {
+    rows: []
+};
+
 export class CustomerList extends Component<any, CustomerListState> {
 
     constructor(props: any) {
         super(props);
-        this.state = {
-            rows: []
-        };
+        this.state = INITIAL_STATE;
     }
 
     componentDidMount() {
@@ -40,7 +42,7 @@ export class CustomerList extends Component<any, CustomerListState> {
                           <CustomerListColumnHeadings/>
                       </TableHead>
                       <TableBody>{this.state.rows
-                        .map(row => <CustomerListRow customer={row}/>)}
+                        .map(row => <CustomerListRow key={row.id} customer={row}/>)}
                       </TableBody>
                   </Table>
               </TablePanel>
@@ -49,12 +51,8 @@ export class CustomerList extends Component<any, CustomerListState> {
     }
 
     private fetchListRows() {
-        axios.get<CustomerRow[]>('http://localhost:3000/api/customer/list')
-          .then((result: AxiosResponse<CustomerRow[]>) => {
-              this.setState({rows: result.data})
-          })
-          .catch((error) => {
-              console.error(error);
-          });
+        service.getCustomerList()
+          .then((rows: CustomerRow[]) => this.setState({rows: rows}))
+          .catch((error) => console.error(error));
     }
 }

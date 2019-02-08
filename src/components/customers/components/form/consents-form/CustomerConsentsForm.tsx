@@ -1,6 +1,6 @@
 import {Component} from "react";
 import React from "react";
-import {FormPanel} from "../../../lib/panels/form-panel/FormPanel";
+import {FormPanel} from "../../../../lib/panels/form-panel/FormPanel";
 import {ConsentSelectionBox, SelectionChangeEvent} from "./consent-selection-box/ConsentSelectionBox";
 
 interface RequiredConsent {
