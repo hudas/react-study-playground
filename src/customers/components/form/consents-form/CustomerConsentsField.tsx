@@ -2,6 +2,7 @@ import {Component} from "react";
 import React from "react";
 import {FormPanel} from "../../../../lib/panels/form-panel/FormPanel";
 import {ConsentSelectionBox, SelectionChangeEvent} from "./consent-selection-box/ConsentSelectionBox";
+import {FormikErrors} from "formik";
 
 interface RequiredConsent {
   id: string;
@@ -24,7 +25,8 @@ export interface ConsentSelection {
 
 export interface ConsentFormProps {
   onChange: (data: ConsentSelection) => void;
-  value: ConsentSelection
+  value: ConsentSelection;
+  error: FormikErrors<CustomerConsentFormState>;
 }
 
 export class CustomerConsentsField extends Component<ConsentFormProps> {
@@ -49,6 +51,7 @@ export class CustomerConsentsField extends Component<ConsentFormProps> {
   render(): React.ReactNode {
     return (
       <FormPanel title="Consents">
+        {this.props.error  && this.props.error.consents}
         {requiredConsents.map(this.selectionRenderer(this.props.value))}
       </FormPanel>
     );

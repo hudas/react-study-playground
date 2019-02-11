@@ -16,7 +16,6 @@ import * as yup from 'yup';
 import {ValidationError} from "yup";
 import moment from "moment";
 import {CustomerContactForm, CustomerContactsFormState} from "./contacts-form/CustomerContactsForm";
-import {requiredOneOfTest} from "../../../lib/validators/object/RequiredOneOfValidator";
 
 
 interface CustomerFormRouteParams {
@@ -49,6 +48,8 @@ export class CustomerForm extends Component<RouteComponentProps<CustomerFormRout
       birthDate: yup.mixed()
         .inRange(moment('2000-01-01'), moment('2018-01-01'))
         .required(),
+      consents: yup.mixed()
+        .someConsentsSelected()
     }).requiredOneOf('email', 'phone');
 
     return schema.validate(value, {abortEarly: false, recursive: true})
@@ -133,6 +134,7 @@ export class CustomerForm extends Component<RouteComponentProps<CustomerFormRout
                     return (
                       <CustomerConsentsField
                         value={field.value}
+                        error={errors}
                         onChange={(value: ConsentSelection) => setFieldValue(field.name, value)}
                       />
                     );

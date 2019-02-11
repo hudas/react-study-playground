@@ -9,12 +9,10 @@ export const requiredOneOfTest = (schema: ObjectSchema<any>) => {
       'One of fields is required',
       function (this: any, value: any) {
 
-        console.log(propertyNames);
-
-        const oneProvided = propertyNames
+        const someProvided = propertyNames
           .some((propertyName: string) => !!value[propertyName] && value[propertyName] !== '');
 
-        if (oneProvided) {
+        if (someProvided) {
           return true;
         }
 
