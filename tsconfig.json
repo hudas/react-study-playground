@@ -17,9 +17,11 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "preserve"
+    "jsx": "preserve",
+    "typeRoots": ["./lib/validators/types", "./node_modules/@types"]
   },
   "include": [
     "src"
-  ]
+  ],
+  "exclude": ["./lib/validators/types"]
 }

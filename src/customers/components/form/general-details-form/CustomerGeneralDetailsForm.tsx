@@ -31,7 +31,11 @@ export function CustomerGeneralDetailsForm({ value, disabled, handlers, errors }
 
   return (
     <FormPanel title="General details">
-      { errors && errors.firstName }
+      <span>{ errors && errors.firstName }</span>
+      <span>{ errors && errors.lastName }</span>
+      <span>{ errors && errors.address }</span>
+      <span>{ errors && errors.birthDate }</span>
+
       <div className={style["form-container"]}>
         <TextField
           name="firstName"

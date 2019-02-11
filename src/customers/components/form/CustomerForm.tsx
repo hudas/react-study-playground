@@ -36,9 +36,10 @@ export class CustomerForm extends Component<RouteComponentProps<CustomerFormRout
   }
 
   validationHandler = (value: CustomerFormStateValue): Promise<FormikErrors<CustomerFormStateValue>> => {
+
     const schema = yup.object<Partial<CustomerFormStateValue>>({
       firstName: yup.string().required(),
-      lastName: yup.string().required(),
+      lastName: yup.string().myValidationMethod(),
     });
 
     return schema.validate(value, { abortEarly: false })
