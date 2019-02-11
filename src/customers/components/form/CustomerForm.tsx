@@ -6,12 +6,12 @@ import {
     CustomerGeneralDetailsForm,
     GeneralDetailsCustomerFormState
 } from "./general-details-form/CustomerGeneralDetailsForm";
-import {CustomerConsentFormState, CustomerConsentsForm} from "./consents-form/CustomerConsentsForm";
+import {ConsentSelection, CustomerConsentFormState, CustomerConsentsField} from "./consents-form/CustomerConsentsField";
 import {CustomerDTO} from "../../services/dto/CustomerUpdateDto";
 
 import * as mappers from "../../services/CustomerMappers";
 import * as service from "../../services/CustomerService";
-import {Field, Formik, FormikActions, FormikProps} from "formik";
+import {Field, FieldProps, Formik, FormikActions, FormikProps} from "formik";
 
 interface CustomerFormRouteParams {
     id: string;
@@ -41,8 +41,6 @@ export class CustomerForm extends Component<RouteComponentProps<CustomerFormRout
   }
 
   render(): React.ReactNode {
-    console.log('this');
-    console.log(this.state.value);
     if (!this.state.loaded) {
       return null;
     }
@@ -56,6 +54,7 @@ export class CustomerForm extends Component<RouteComponentProps<CustomerFormRout
     ) : (
       "New customer"
     );
+
     return (
       <div>
         <Typography variant="headline" color="primary">
@@ -74,17 +73,23 @@ export class CustomerForm extends Component<RouteComponentProps<CustomerFormRout
                   }, handleBlur, setFieldValue
                 }}
               />
+              <Field
+                name="consents"
+                render={({ field, form }: FieldProps) => {
+
+                  return (
+                    <CustomerConsentsField
+                      value={field.value}
+                      onChange={(value: ConsentSelection) => setFieldValue(field.name, value)}
+                    />
+                  );
+                }}
+              />
 
               <PrimaryButton type="submit">Submit</PrimaryButton>
             </form>
           )}
         />
-
-        {/*<CustomerConsentsForm*/}
-        {/*value={this.state.value}*/}
-        {/*onChange={this.changeHandler}*/}
-        {/*/>*/}
-
       </div>
     );
   }
@@ -105,7 +110,6 @@ export class CustomerForm extends Component<RouteComponentProps<CustomerFormRout
 
   private updateState(subFormValue: Partial<CustomerFormStateValue>) {
     this.setState({
-      loaded: true,
       value: {
         ...this.state.value,
         ...subFormValue
@@ -113,16 +117,26 @@ export class CustomerForm extends Component<RouteComponentProps<CustomerFormRout
     });
   }
 
+  private markStateLoaded() {
+    this.setState({
+      loaded: true
+    });
+  }
+
   private loadExistingState() {
     const existing = this.existingCustomerId();
 
-    if (existing) {
-      service.getCustomer(existing)
-        .then((customerDto: Partial<CustomerDTO>) => {
-          const loadedFormState = mappers.customerDtoToFormState(customerDto);
-          this.updateState(loadedFormState);
-        });
+    if (!existing) {
+      this.markStateLoaded();
+      return;
     }
+
+    service.getCustomer(existing)
+      .then((customerDto: Partial<CustomerDTO>) => {
+        const loadedFormState = mappers.customerDtoToFormState(customerDto);
+        this.updateState(loadedFormState);
+        this.markStateLoaded();
+      });
   }
 
   private initFormState() {

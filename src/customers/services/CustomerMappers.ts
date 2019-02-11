@@ -1,6 +1,6 @@
 import {ConsentDTO, CustomerDTO} from "./dto/CustomerUpdateDto";
 import {CustomerFormStateValue} from "../components/form/CustomerForm";
-import {ConsentSelection} from "../components/form/consents-form/CustomerConsentsForm";
+import {ConsentSelection} from "../components/form/consents-form/CustomerConsentsField";
 
 export function customerDtoToFormState(dto: Partial<CustomerDTO>): CustomerFormStateValue {
     return {

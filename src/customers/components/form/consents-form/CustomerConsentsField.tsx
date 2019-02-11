@@ -22,13 +22,12 @@ export interface ConsentSelection {
   [consentId: string]: boolean;
 }
 
-
 export interface ConsentFormProps {
-  onChange: (data: CustomerConsentFormState) => void;
-  value: CustomerConsentFormState
+  onChange: (data: ConsentSelection) => void;
+  value: ConsentSelection
 }
 
-export class CustomerConsentsForm extends Component<ConsentFormProps> {
+export class CustomerConsentsField extends Component<ConsentFormProps> {
 
   changeHandler = (event: SelectionChangeEvent) => {
     this.emitConsentChange(event.id, event.value);
@@ -50,17 +49,17 @@ export class CustomerConsentsForm extends Component<ConsentFormProps> {
   render(): React.ReactNode {
     return (
       <FormPanel title="Consents">
-        {requiredConsents.map(this.selectionRenderer(this.props.value.consents))}
+        {requiredConsents.map(this.selectionRenderer(this.props.value))}
       </FormPanel>
     );
   }
 
   private emitConsentChange(id: string, changedValue: any) {
     const updatedConsents = {
-      ...this.props.value.consents,
+      ...this.props.value,
       [id]: changedValue,
     };
 
-    this.props.onChange({ consents: updatedConsents });
+    this.props.onChange(updatedConsents);
   }
 }
