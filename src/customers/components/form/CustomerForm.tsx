@@ -15,13 +15,15 @@ import {Field, FieldProps, Formik, FormikErrors, FormikProps} from "formik";
 import * as yup from 'yup';
 import {ValidationError} from "yup";
 import moment from "moment";
+import {CustomerContactForm, CustomerContactsFormState} from "./contacts-form/CustomerContactsForm";
+import {requiredOneOfTest} from "../../../lib/validators/object/RequiredOneOfValidator";
 
 
 interface CustomerFormRouteParams {
     id: string;
 }
 
-export type CustomerFormStateValue = GeneralDetailsCustomerFormState & CustomerConsentFormState;
+export type CustomerFormStateValue = GeneralDetailsCustomerFormState & CustomerContactsFormState & CustomerConsentFormState;
 
 export interface CustomerFormState {
   value: CustomerFormStateValue;
@@ -36,46 +38,38 @@ export class CustomerForm extends Component<RouteComponentProps<CustomerFormRout
     this.initFormState();
   }
 
-
-  componentDidCatch(error: Error, errorInfo: React.ErrorInfo): void {
-    console.log(error);
-  }
-
   validationHandler = (value: CustomerFormStateValue): Promise<FormikErrors<CustomerFormStateValue>> => {
-    const schema = yup.object<Partial<CustomerFormStateValue>>({
+    let schema = yup.object<Partial<CustomerFormStateValue>>({
       firstName: yup.string()
         .required(),
       lastName: yup.string()
         .required(),
+      address: yup.string()
+        .required(),
       birthDate: yup.mixed()
         .inRange(moment('2000-01-01'), moment('2018-01-01'))
         .required(),
-    });
+    }).requiredOneOf('email', 'phone');
 
-    try {
-      return schema.validate(value, { abortEarly: false })
-        .then(() => Promise.resolve({}))
-        .catch((error: ValidationError) => {
-          const validationErrors: FormikErrors<CustomerFormStateValue> =
-            error.inner.reduce((accumulator: FormikErrors<CustomerFormStateValue>, current: ValidationError) => {
-                return {...accumulator, [current.path]: current.message}
-              },
-              {}
-            );
+    return schema.validate(value, {abortEarly: false, recursive: true})
+      .then((it: any) => Promise.resolve({}))
+      .catch((error: ValidationError) => {
+        console.log(error);
+        const validationErrors: FormikErrors<CustomerFormStateValue> =
+          error.inner.reduce((accumulator: FormikErrors<CustomerFormStateValue>, current: ValidationError) => {
+              return {...accumulator, [current.path]: current.message}
+            },
+            {}
+          );
 
-          return Promise.resolve(validationErrors);
-        })
-        .then((validation: FormikErrors<CustomerFormStateValue>) => {
-          // Pretty strange API :)
-          // In case of sync validation => you have to return errors
-          // In case of async validation => you have to throw errors
-          throw validation;
-        });
-
-    } catch (e) {
-      console.error(e);
-      return Promise.resolve({})
-    }
+        return Promise.resolve(validationErrors);
+      })
+      .then((validation: FormikErrors<CustomerFormStateValue>) => {
+        // Pretty strange API :)
+        // In case of sync validation => you have to return errors
+        // In case of async validation => you have to throw errors
+        throw validation;
+      });
 
   };
 
@@ -112,7 +106,7 @@ export class CustomerForm extends Component<RouteComponentProps<CustomerFormRout
           validate={this.validationHandler}
           onSubmit={this.submitHandler}
           render={
-            ({values, handleSubmit, handleChange, setFieldValue, handleBlur, errors}: FormikProps<GeneralDetailsCustomerFormState>) => {
+            ({values, handleSubmit, handleChange, setFieldValue, handleBlur, errors}: FormikProps<CustomerFormStateValue>) => {
 
             return (
               <form noValidate onSubmit={handleSubmit}>
@@ -120,11 +114,16 @@ export class CustomerForm extends Component<RouteComponentProps<CustomerFormRout
                   value={values}
                   errors={errors}
                   handlers={{
-                    handleChange: (event: any) => {
-                      handleChange(event)
-                    },
+                    handleChange,
                     handleBlur: handleBlur,
                     setFieldValue: setFieldValue
+                  }}
+                />
+                <CustomerContactForm
+                  value={values}
+                  errors={errors}
+                  handlers={{
+                    handleChange
                   }}
                 />
                 <Field
@@ -201,6 +200,8 @@ export class CustomerForm extends Component<RouteComponentProps<CustomerFormRout
         lastName: '',
         birthDate: null,
         address: '',
+        phone: '',
+        email: '',
         consents: {}
       },
       updated: false,

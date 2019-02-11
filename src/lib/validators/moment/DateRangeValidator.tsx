@@ -1,4 +1,4 @@
-import {MixedSchema, Schema,} from "yup";
+import {MixedSchema} from "yup";
 import {Moment} from "moment";
 
 export const inRangeTest = (schema: MixedSchema) => {
@@ -9,7 +9,7 @@ export const inRangeTest = (schema: MixedSchema) => {
       'Date is not in allowed range',
       function (this: any, value: Moment) {
 
-        if (value.isBetween(from, to)) {
+        if (!value || value.isBetween(from, to)) {
           return true;
         }
 

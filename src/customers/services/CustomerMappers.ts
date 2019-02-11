@@ -8,6 +8,8 @@ export function customerDtoToFormState(dto: Partial<CustomerDTO>): CustomerFormS
       lastName: dto.lastName,
       birthDate: dto.birthDate,
       address: dto.address,
+      email: '',
+      phone: '',
       consents: customerConsentDtoToFormState(dto.consents || [])
     };
 }

@@ -1,11 +1,10 @@
-import {Component} from "react";
 import {Moment} from "moment";
 import React from "react";
 import {FormPanel} from "../../../../lib/panels/form-panel/FormPanel";
 import style from "./CustomerGeneralDetailsForm.module.scss";
 import {TextField} from "@material-ui/core";
 import {DatePicker} from "material-ui-pickers";
-import {Field, FieldProps, FormikActions, FormikErrors, FormikHandlers, FormikProps} from "formik";
+import {FormikActions, FormikErrors, FormikHandlers} from "formik";
 
 export interface GeneralDetailsCustomerFormState {
   firstName?: string;
@@ -26,9 +25,6 @@ export interface GeneralDetailsFormProps {
 }
 
 export function CustomerGeneralDetailsForm({ value, disabled, handlers, errors }: GeneralDetailsFormProps) {
-  // console.log('Errors');
-  // console.log(errors);
-
   return (
     <FormPanel title="General details">
       <span>{ errors && errors.firstName }</span>
