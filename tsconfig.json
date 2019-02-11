@@ -18,7 +18,7 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "preserve",
-    "typeRoots": ["./lib/validators/types", "./node_modules/@types"]
+    "typeRoots": ["./lib/validators/types", "./node_modules/@types", "./node_modules/moment"]
   },
   "include": [
     "src"

@@ -14,7 +14,8 @@ import * as service from "../../services/CustomerService";
 import {Field, FieldProps, Formik, FormikErrors, FormikProps} from "formik";
 import * as yup from 'yup';
 import {ValidationError} from "yup";
-import {throws} from "assert";
+import moment from "moment";
+
 
 interface CustomerFormRouteParams {
     id: string;
@@ -35,31 +36,47 @@ export class CustomerForm extends Component<RouteComponentProps<CustomerFormRout
     this.initFormState();
   }
 
-  validationHandler = (value: CustomerFormStateValue): Promise<FormikErrors<CustomerFormStateValue>> => {
 
+  componentDidCatch(error: Error, errorInfo: React.ErrorInfo): void {
+    console.log(error);
+  }
+
+  validationHandler = (value: CustomerFormStateValue): Promise<FormikErrors<CustomerFormStateValue>> => {
     const schema = yup.object<Partial<CustomerFormStateValue>>({
-      firstName: yup.string().required(),
-      lastName: yup.string().myValidationMethod(),
+      firstName: yup.string()
+        .required(),
+      lastName: yup.string()
+        .required(),
+      birthDate: yup.mixed()
+        .inRange(moment('2000-01-01'), moment('2018-01-01'))
+        .required(),
     });
 
-    return schema.validate(value, { abortEarly: false })
-      .then(() => Promise.resolve({}))
-      .catch((error: ValidationError) => {
-        const validationErrors: FormikErrors<CustomerFormStateValue> =
-          error.inner.reduce((accumulator: FormikErrors<CustomerFormStateValue>, current: ValidationError) => {
-              return {...accumulator, [current.path]: current.message}
-            },
-            {}
-          );
+    try {
+      return schema.validate(value, { abortEarly: false })
+        .then(() => Promise.resolve({}))
+        .catch((error: ValidationError) => {
+          const validationErrors: FormikErrors<CustomerFormStateValue> =
+            error.inner.reduce((accumulator: FormikErrors<CustomerFormStateValue>, current: ValidationError) => {
+                return {...accumulator, [current.path]: current.message}
+              },
+              {}
+            );
 
-        return Promise.resolve(validationErrors);
-      })
-      .then((validation: FormikErrors<CustomerFormStateValue>) => {
-        // Pretty strange API :)
-        // In case of sync validation => you have to return errors
-        // In case of async validation => you have to throw errors
-        throw validation;
-      });
+          return Promise.resolve(validationErrors);
+        })
+        .then((validation: FormikErrors<CustomerFormStateValue>) => {
+          // Pretty strange API :)
+          // In case of sync validation => you have to return errors
+          // In case of async validation => you have to throw errors
+          throw validation;
+        });
+
+    } catch (e) {
+      console.error(e);
+      return Promise.resolve({})
+    }
+
   };
 
   submitHandler = (value: CustomerFormStateValue) => {

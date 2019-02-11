@@ -1,7 +1,11 @@
-import { StringSchema } from 'yup'
+import { MixedSchema } from 'yup'
+import * as moment from "moment";
 
 declare module 'yup' {
-  interface StringSchema {
-    myValidationMethod(): StringSchema
+
+
+
+  interface MixedSchema {
+    inRange(from: moment.Moment, to: moment.Moment): MixedSchema
   }
 }
