@@ -11,7 +11,10 @@ import {CustomerDTO} from "../../services/dto/CustomerUpdateDto";
 
 import * as mappers from "../../services/CustomerMappers";
 import * as service from "../../services/CustomerService";
-import {Field, FieldProps, Formik, FormikActions, FormikProps} from "formik";
+import {Field, FieldProps, Formik, FormikErrors, FormikProps} from "formik";
+import * as yup from 'yup';
+import {ValidationError} from "yup";
+import {throws} from "assert";
 
 interface CustomerFormRouteParams {
     id: string;
@@ -31,6 +34,32 @@ export class CustomerForm extends Component<RouteComponentProps<CustomerFormRout
     super(props);
     this.initFormState();
   }
+
+  validationHandler = (value: CustomerFormStateValue): Promise<FormikErrors<CustomerFormStateValue>> => {
+    const schema = yup.object<Partial<CustomerFormStateValue>>({
+      firstName: yup.string().required(),
+      lastName: yup.string().required(),
+    });
+
+    return schema.validate(value, { abortEarly: false })
+      .then(() => Promise.resolve({}))
+      .catch((error: ValidationError) => {
+        const validationErrors: FormikErrors<CustomerFormStateValue> =
+          error.inner.reduce((accumulator: FormikErrors<CustomerFormStateValue>, current: ValidationError) => {
+              return {...accumulator, [current.path]: current.message}
+            },
+            {}
+          );
+
+        return Promise.resolve(validationErrors);
+      })
+      .then((validation: FormikErrors<CustomerFormStateValue>) => {
+        // Pretty strange API :)
+        // In case of sync validation => you have to return errors
+        // In case of async validation => you have to throw errors
+        throw validation;
+      });
+  };
 
   submitHandler = (value: CustomerFormStateValue) => {
     this.updateCustomer(value);
@@ -62,33 +91,41 @@ export class CustomerForm extends Component<RouteComponentProps<CustomerFormRout
         </Typography>
         <Formik
           initialValues={this.state.value}
+          validate={this.validationHandler}
           onSubmit={this.submitHandler}
-          render={({values, handleSubmit, handleChange, setFieldValue, handleBlur}: FormikProps<GeneralDetailsCustomerFormState>) => (
-            <form noValidate onSubmit={handleSubmit}>
-              <CustomerGeneralDetailsForm
-                value={values}
-                handlers={{
-                  handleChange: (event: any) => {
-                    handleChange(event)
-                  }, handleBlur, setFieldValue
-                }}
-              />
-              <Field
-                name="consents"
-                render={({ field, form }: FieldProps) => {
+          render={
+            ({values, handleSubmit, handleChange, setFieldValue, handleBlur, errors}: FormikProps<GeneralDetailsCustomerFormState>) => {
 
-                  return (
-                    <CustomerConsentsField
-                      value={field.value}
-                      onChange={(value: ConsentSelection) => setFieldValue(field.name, value)}
-                    />
-                  );
-                }}
-              />
+            return (
+              <form noValidate onSubmit={handleSubmit}>
+                <CustomerGeneralDetailsForm
+                  value={values}
+                  errors={errors}
+                  handlers={{
+                    handleChange: (event: any) => {
+                      handleChange(event)
+                    },
+                    handleBlur: handleBlur,
+                    setFieldValue: setFieldValue
+                  }}
+                />
+                <Field
+                  name="consents"
+                  render={({ field }: FieldProps) => {
 
-              <PrimaryButton type="submit">Submit</PrimaryButton>
-            </form>
-          )}
+                    return (
+                      <CustomerConsentsField
+                        value={field.value}
+                        onChange={(value: ConsentSelection) => setFieldValue(field.name, value)}
+                      />
+                    );
+                  }}
+                />
+
+                <PrimaryButton type="submit">Submit</PrimaryButton>
+              </form>
+            )
+          }}
         />
       </div>
     );
