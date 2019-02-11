@@ -11,6 +11,7 @@ import {CustomerDTO} from "../../services/dto/CustomerUpdateDto";
 
 import * as mappers from "../../services/CustomerMappers";
 import * as service from "../../services/CustomerService";
+import {Field, Formik, FormikActions, FormikProps} from "formik";
 
 interface CustomerFormRouteParams {
     id: string;
@@ -21,6 +22,7 @@ export type CustomerFormStateValue = GeneralDetailsCustomerFormState & CustomerC
 export interface CustomerFormState {
   value: CustomerFormStateValue;
   updated: boolean;
+  loaded: boolean;
 }
 
 export class CustomerForm extends Component<RouteComponentProps<CustomerFormRouteParams>, CustomerFormState> {
@@ -30,51 +32,60 @@ export class CustomerForm extends Component<RouteComponentProps<CustomerFormRout
     this.initFormState();
   }
 
-  submitHandler = (event: any) => {
-    this.updateCustomer();
-    event.preventDefault();
+  submitHandler = (value: CustomerFormStateValue) => {
+    this.updateCustomer(value);
   };
 
-  changeHandler = (subFormValue: Partial<CustomerFormStateValue>) => {
-    this.updateState(subFormValue);
-  };
-
-  componentDidMount(): void {
+  componentWillMount(): void {
     this.loadExistingState();
   }
 
   render(): React.ReactNode {
+    console.log('this');
+    console.log(this.state.value);
+    if (!this.state.loaded) {
+      return null;
+    }
+
+    if (this.state.updated) {
+      return <Redirect to="/customer/list"/>
+    }
+
     const formlabel = this.existingCustomerId() ? (
       "Customer  " + this.props.match.params.id
     ) : (
       "New customer"
     );
-
     return (
-      this.state.updated ? (
-        <Redirect to="/customer/list"/>
-        ) : (
-        <div>
-          <Typography variant="headline" color="primary">
-            {formlabel}
-          </Typography>
-          <CustomerGeneralDetailsForm
-            value={this.state.value}
-            onChange={this.changeHandler}
-          />
-          <CustomerConsentsForm
-            value={this.state.value}
-            onChange={this.changeHandler}
-          />
+      <div>
+        <Typography variant="headline" color="primary">
+          {formlabel}
+        </Typography>
+        <Formik
+          initialValues={this.state.value}
+          onSubmit={this.submitHandler}
+          render={({values, handleSubmit, handleChange, setFieldValue, handleBlur}: FormikProps<GeneralDetailsCustomerFormState>) => (
+            <form noValidate onSubmit={handleSubmit}>
+              <CustomerGeneralDetailsForm
+                value={values}
+                handlers={{
+                  handleChange: (event: any) => {
+                    handleChange(event)
+                  }, handleBlur, setFieldValue
+                }}
+              />
 
-          <form
-            noValidate
-            onSubmit={this.submitHandler}
-          >
-            <PrimaryButton type="submit">Submit</PrimaryButton>
-          </form>
-        </div>
-      )
+              <PrimaryButton type="submit">Submit</PrimaryButton>
+            </form>
+          )}
+        />
+
+        {/*<CustomerConsentsForm*/}
+        {/*value={this.state.value}*/}
+        {/*onChange={this.changeHandler}*/}
+        {/*/>*/}
+
+      </div>
     );
   }
 
@@ -82,9 +93,9 @@ export class CustomerForm extends Component<RouteComponentProps<CustomerFormRout
     return this.props.match.params.id;
   }
 
-  private updateCustomer() {
+  private updateCustomer(formState: CustomerFormStateValue) {
     const existingId = this.existingCustomerId();
-    const dto: Partial<CustomerDTO> = mappers.customerFormStateToDto(this.state.value);
+    const dto: Partial<CustomerDTO> = mappers.customerFormStateToDto(formState);
 
     const update = existingId ? service.updateCustomer(existingId, dto) : service.createCustomer(dto);
 
@@ -94,6 +105,7 @@ export class CustomerForm extends Component<RouteComponentProps<CustomerFormRout
 
   private updateState(subFormValue: Partial<CustomerFormStateValue>) {
     this.setState({
+      loaded: true,
       value: {
         ...this.state.value,
         ...subFormValue
@@ -122,7 +134,8 @@ export class CustomerForm extends Component<RouteComponentProps<CustomerFormRout
         address: '',
         consents: {}
       },
-      updated: false
+      updated: false,
+      loaded: false
     }
   }
 }

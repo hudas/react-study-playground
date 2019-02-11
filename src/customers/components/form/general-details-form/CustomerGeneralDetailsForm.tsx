@@ -2,9 +2,10 @@ import {Component} from "react";
 import {Moment} from "moment";
 import React from "react";
 import {FormPanel} from "../../../../lib/panels/form-panel/FormPanel";
-import {TextField} from "@material-ui/core";
 import style from "./CustomerGeneralDetailsForm.module.scss";
+import {TextField} from "@material-ui/core";
 import {DatePicker} from "material-ui-pickers";
+import {FormikActions, FormikHandlers} from "formik";
 
 export interface GeneralDetailsCustomerFormState {
   firstName?: string;
@@ -15,80 +16,64 @@ export interface GeneralDetailsCustomerFormState {
 
 export interface GeneralDetailsFormProps {
   value: GeneralDetailsCustomerFormState;
-  onChange?: (data: GeneralDetailsCustomerFormState) => void;
+  handlers?: {
+    handleChange?: FormikHandlers['handleChange'];
+    handleBlur?: FormikHandlers['handleBlur'];
+    setFieldValue?: FormikActions<GeneralDetailsCustomerFormState>['setFieldValue'];
+  };
   disabled?: boolean;
 }
 
-export class CustomerGeneralDetailsForm extends Component<GeneralDetailsFormProps> {
+export function CustomerGeneralDetailsForm({ value, disabled, handlers }: GeneralDetailsFormProps) {
+  return (
+    <FormPanel title="General details">
 
-  changeHandler = (field: keyof GeneralDetailsCustomerFormState) => {
-    return (event: any) => {
-      const targetInput = event.target;
-      const newValue = targetInput.type === 'checkbox' ? targetInput.checked : targetInput.value;
+      <div className={style["form-container"]}>
+        <TextField
+          name="firstName"
+          label="First name"
+          margin="normal"
+          value={value.firstName}
+          disabled={disabled}
+          onChange={handlers && handlers.handleChange}
+          onBlur={handlers && handlers.handleBlur}
+          className={style["first-name-field"]}
+        />
 
-      this.emitChange(field, newValue);
-    }
-  };
+        <TextField
+          label="Last name"
+          name="lastName"
+          margin="normal"
+          value={value.lastName}
+          disabled={disabled}
+          onChange={handlers && handlers.handleChange}
+          onBlur={handlers && handlers.handleBlur}
+          className={style["last-name-field"]}
+        />
 
-  dateChangeHandler = (field: keyof GeneralDetailsCustomerFormState) => {
-    return (date: Moment) => {
-      this.emitChange(field, date);
-    };
-  };
+        <TextField
+          name="address"
+          label="Address"
+          margin="normal"
+          value={value.address}
+          disabled={disabled}
+          onChange={handlers && handlers.handleChange}
+          onBlur={handlers && handlers.handleBlur}
+          className={style["address-field"]}
+        />
 
-  render(): React.ReactNode {
-    return (
-      <FormPanel title="General details">
-        <form className={style["form-container"]}>
-          <TextField
-            id="firstName"
-            label="First name"
-            margin="normal"
-            className={style["first-name-field"]}
-            disabled={this.props.disabled}
-            value={this.props.value.firstName}
-            onChange={this.changeHandler('firstName')}
-          />
+        <DatePicker
+          name="birthDate"
+          label="Birth date"
+          keyboard={false}
+          value={value.birthDate}
+          disabled={disabled}
+          onChange={(date: Moment) => handlers && handlers.setFieldValue && handlers.setFieldValue('birthDate', date)}
+          className={style["birthday-field"]}
+        />
+      </div>
 
-          <TextField
-            id="lastName"
-            label="Last name"
-            margin="normal"
-            className={style["last-name-field"]}
-            disabled={this.props.disabled}
-            value={this.props.value.lastName}
-            onChange={this.changeHandler('lastName')}
-          />
+    </FormPanel>
+  );
 
-          <TextField
-            id="address"
-            label="Address"
-            margin="normal"
-            className={style["address-field"]}
-            disabled={this.props.disabled}
-            value={this.props.value.address}
-            onChange={this.changeHandler('address')}
-          />
-
-          <DatePicker
-            label="Birth date"
-            keyboard={false}
-            className={style["birthday-field"]}
-            disabled={this.props.disabled}
-            value={this.props.value.birthDate}
-            onChange={this.dateChangeHandler('birthDate')}
-          />
-        </form>
-      </FormPanel>
-    );
-  }
-
-  private emitChange(field: keyof GeneralDetailsCustomerFormState, changedValue: any) {
-    const updatedDetails = {
-      ...this.props.value,
-      [field]: changedValue,
-    };
-
-    this.props.onChange && this.props.onChange(updatedDetails);
-  }
 }
