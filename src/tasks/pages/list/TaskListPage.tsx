@@ -3,6 +3,7 @@ import {TaskList, TaskRow} from "../../components/list/TaskList";
 import {getAllTasks} from "../../store/list/TaskListSelectors";
 import {loadTaskList} from "../../store/list/TaskListActions";
 import { connect } from 'react-redux'
+import {AppState} from "../../../Store";
 
 export interface TaskListPageProps {
   tasks: TaskRow[];
@@ -16,12 +17,14 @@ class TaskListPage extends Component<TaskListPageProps> {
   }
 
   render(): React.ReactNode {
-    return <TaskList rows={this.props.tasks}/>;
+    return (
+      <TaskList rows={this.props.tasks}/>
+    );
   }
 }
 
 
-const mapStateToProps = (state: any) => ({
+const mapStateToProps = (state: AppState) => ({
   tasks: getAllTasks(state)
 });
 

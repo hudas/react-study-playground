@@ -3,6 +3,9 @@ import {reduceTaskList} from "./tasks/store/list/TaskListReducers";
 import {composeWithDevTools} from "redux-devtools-extension";
 import {TaskListState} from "./tasks/store/list/TaskListState";
 import {taskListMiddleware} from "./tasks/store/list/TaskListMiddleware";
+import {TaskState} from "./tasks/store/view/TaskState";
+import {reduceTask} from "./tasks/store/view/TaskReducers";
+import {taskMiddleware} from "./tasks/store/view/TaskMiddleware";
 
 export enum ActionStatus {
   REQUEST = 'REQUEST',
@@ -10,22 +13,28 @@ export enum ActionStatus {
   FAILURE = 'FAILURE'
 }
 
-
 export interface AppAction extends Action {
   status: ActionStatus;
 }
 
 export interface AppState {
   taskList: TaskListState;
+  task: TaskState;
 }
 
 export function configureStore(): Store<AppState, Action> {
-  const rootReducer = combineReducers<AppState>({
-    taskList: reduceTaskList
-  });
+  try {
+    const rootReducer = combineReducers<AppState>({
+      taskList: reduceTaskList,
+      task: reduceTask
+    });
 
-  const middlewares = [taskListMiddleware];
+    const middlewares = [taskListMiddleware, taskMiddleware];
 
-  return createStore(rootReducer, composeWithDevTools(applyMiddleware(...middlewares)));
+    return createStore(rootReducer, composeWithDevTools(applyMiddleware(...middlewares)));;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }
 }
 

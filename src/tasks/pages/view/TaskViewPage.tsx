@@ -1,56 +1,43 @@
 import React, {Component} from "react";
 import {Task, TaskView} from "../../components/view/TaskView";
 import {RouteComponentProps} from "react-router";
-import {getTask} from "../../services/TaskService";
-import {taskDtoToFormState} from "../../services/TaskMappers";
-import {TaskDto} from "../../services/dto/TaskDto";
+import {connect} from "react-redux";
+import {AppState} from "../../../Store";
+import {getTask} from "../../store/view/TaskSelectors";
+import {loadTask} from "../../store/view/TaskActions";
 
-export type TaskViewPageProps = RouteComponentProps<TaskViewRouteParams>;
+export interface TaskViewPageProps extends RouteComponentProps<TaskViewRouteParams> {
+  task: Task;
+  loadTask: (id: string) => void;
+}
 
 export interface TaskViewRouteParams {
   id: string;
 }
 
-export interface TaskViewPageState {
-  value: Task;
-}
 
-
-const INITIAL_STATE: TaskViewPageState = {
-  value: {
-    id: '',
-    name: '',
-    description: '',
-    status: '',
-    createdAt: null,
-    createdBy: '',
-    comments: []
-  }
-};
-
-export class TaskViewPage extends Component<TaskViewPageProps, TaskViewPageState> {
-
-  constructor(props: TaskViewPageProps) {
-    super(props);
-    this.state = INITIAL_STATE;
-  }
+class TaskViewPage extends Component<TaskViewPageProps, any> {
 
   componentDidMount(): void {
-    this.loadTask();
+    this.props.loadTask(this.props.match.params.id);
   }
 
   render(): React.ReactNode {
     return (
-      <TaskView task={this.state.value}/>
+      <TaskView task={this.props.task}/>
     );
   }
-
-  private loadTask() {
-    getTask(this.props.match.params.id)
-      .then((taskDto: Partial<TaskDto>) =>
-        this.setState({
-          value: taskDtoToFormState(taskDto) as Task
-        })
-      );
-  }
 }
+
+const mapStateToProps = (state: AppState) => ({
+  task: getTask(state)
+});
+
+const mapDispatchToProps = (dispatch: any) => ({
+  loadTask: (id: string) => dispatch(loadTask(id))
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(TaskViewPage);
