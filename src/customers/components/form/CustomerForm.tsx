@@ -13,8 +13,7 @@ import * as mappers from "../../services/CustomerMappers";
 import * as service from "../../services/CustomerService";
 import {Field, FieldProps, Formik, FormikErrors, FormikProps} from "formik";
 import * as yup from 'yup';
-import {ValidationError} from "yup";
-import moment from "moment";
+import {ObjectSchema, ValidationError} from "yup";
 import {CustomerContactForm, CustomerContactsFormState} from "./contacts-form/CustomerContactsForm";
 
 
@@ -37,22 +36,17 @@ export class CustomerForm extends Component<RouteComponentProps<CustomerFormRout
     this.initFormState();
   }
 
-  validationHandler = (value: CustomerFormStateValue): Promise<FormikErrors<CustomerFormStateValue>> => {
-    let schema = yup.object<Partial<CustomerFormStateValue>>({
-      firstName: yup.string()
-        .required(),
-      lastName: yup.string()
-        .required(),
-      address: yup.string()
-        .required(),
-      birthDate: yup.mixed()
-        .inRange(moment('2000-01-01'), moment('2018-01-01'))
-        .required(),
-      consents: yup.mixed()
-        .someConsentsSelected()
-    }).requiredOneOf('email', 'phone');
+  validationSchema: ObjectSchema<Partial<CustomerFormStateValue>> = yup.object<Partial<CustomerFormStateValue>>({
+    consents: yup.mixed()
+      .someConsentsSelected()
+  });
 
-    return schema.validate(value, {abortEarly: false, recursive: true})
+  validationSchemaRegistrar = (subFormSchema: ObjectSchema<Partial<CustomerFormStateValue>>) => {
+    this.validationSchema = this.validationSchema.concat(subFormSchema);
+  };
+
+  validationHandler = (value: CustomerFormStateValue): Promise<FormikErrors<CustomerFormStateValue>> => {
+    return this.validationSchema.validate(value, {abortEarly: false, recursive: true})
       .then((it: any) => Promise.resolve({}))
       .catch((error: ValidationError) => {
         console.log(error);
@@ -119,6 +113,7 @@ export class CustomerForm extends Component<RouteComponentProps<CustomerFormRout
                     handleBlur: handleBlur,
                     setFieldValue: setFieldValue
                   }}
+                  registerSchema={this.validationSchemaRegistrar}
                 />
                 <CustomerContactForm
                   value={values}
@@ -126,6 +121,7 @@ export class CustomerForm extends Component<RouteComponentProps<CustomerFormRout
                   handlers={{
                     handleChange
                   }}
+                  registerSchema={this.validationSchemaRegistrar}
                 />
                 <Field
                   name="consents"
