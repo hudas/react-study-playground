@@ -9,6 +9,7 @@ import {AppRouter} from "./core/router/AppRouter";
 import {MuiPickersUtilsProvider} from "material-ui-pickers";
 import MomentUtils from "@date-io/moment";
 import {registerValidations} from "./lib/validators/CustomValidatorRegistry";
+import {createStore} from "redux";
 
 interface AppState {
     auth: AuthState;

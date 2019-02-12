@@ -1,8 +1,6 @@
 import React, {Component} from "react";
 import {Task, TaskView} from "../../components/view/TaskView";
 import {RouteComponentProps} from "react-router";
-import axios, {AxiosResponse} from "axios";
-import moment, {Moment} from "moment";
 import {getTask} from "../../services/TaskService";
 import {taskDtoToFormState} from "../../services/TaskMappers";
 import {TaskDto} from "../../services/dto/TaskDto";

@@ -1,7 +1,7 @@
 import {AppRoutedComponentProps} from "../../core/router/AppRouter";
 import {Redirect, Route, Switch} from "react-router";
 import {withGuard} from "../../core/components/content/guard/RouteGuard";
-import {TaskListPage} from "../pages/list/TaskListPage";
+import TaskListPage from "../pages/list/TaskListPage";
 import {TaskViewPage} from "../pages/view/TaskViewPage";
 import React from "react";
 

@@ -3,6 +3,9 @@ import {TaskList, TaskRow} from "../../components/list/TaskList";
 import {getTaskList} from "../../services/TaskService";
 import {TaskListDto} from "../../services/dto/TaskListDto";
 import {taskListDtoToRow} from "../../services/TaskMappers";
+import {getAllTasks} from "../../store/list/TaskListSelectors";
+import {loadTaskListFactory} from "../../store/list/TaskListActions";
+import { connect } from 'react-redux'
 
 export interface TaskListPageState {
   rows: TaskRow[];
@@ -12,14 +15,16 @@ const INITIAL_STATE: TaskListPageState = {
   rows: []
 };
 
-export class TaskListPage extends Component<{}, TaskListPageState> {
+class TaskListPage extends Component<any, any> {
 
-  constructor(props: TaskListPageState) {
+  constructor(props: any) {
     super(props);
+    console.log(props);
     this.state = INITIAL_STATE;
   }
 
   componentDidMount(): void {
+    this.props.load();
     this.loadTaskList();
   }
 
@@ -36,3 +41,17 @@ export class TaskListPage extends Component<{}, TaskListPageState> {
       );
   }
 }
+
+
+const mapStateToProps = (state: any) => ({
+  tasks: getAllTasks(state)
+});
+
+const mapDispatchToProps = (dispatch: any) => ({
+  load: () => dispatch(loadTaskListFactory())
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(TaskListPage);
