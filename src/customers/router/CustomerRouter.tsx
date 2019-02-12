@@ -6,6 +6,9 @@ import {CustomerView} from "../components/view/CustomerView";
 import {NotFound} from "../../core/components/content/not-found/NotFound";
 import React from "react";
 import {AppRoutedComponentProps} from "../../core/router/AppRouter";
+import {CustomerListPage} from "../pages/list/CustomerListPage";
+import {CustomerViewPage} from "../pages/view/CustomerViewPage";
+import {CustomerUpdatePage} from "../pages/update/CustomerUpdatePage";
 
 export function CustomerRouter({ auth, match }: AppRoutedComponentProps) {
   return (
@@ -18,19 +21,19 @@ export function CustomerRouter({ auth, match }: AppRoutedComponentProps) {
         />
         <Route
           path={`${match.path}/new`}
-          component={withGuard(CustomerForm, ["ADMIN"], auth)}
+          component={withGuard(CustomerUpdatePage, ["ADMIN"], auth)}
         />
         <Route
           path={`${match.path}/list`}
-          component={withGuard(CustomerList, ["GUEST", "ADMIN"], auth)}
+          component={withGuard(CustomerListPage, ["GUEST", "ADMIN"], auth)}
         />
         <Route
           path={`${match.path}/edit/:id`}
-          component={withGuard(CustomerForm, ["ADMIN"], auth)}
+          component={withGuard(CustomerUpdatePage, ["ADMIN"], auth)}
         />
         <Route
           path={`${match.path}/:id`}
-          component={withGuard(CustomerView, ["GUEST", "ADMIN"], auth)}
+          component={withGuard(CustomerViewPage, ["GUEST", "ADMIN"], auth)}
         />
         <Route
           component={NotFound}
