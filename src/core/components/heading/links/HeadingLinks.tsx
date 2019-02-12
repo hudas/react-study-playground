@@ -12,6 +12,7 @@ const navigationRoutes: NavigationRoute[] = [
     { path: '/customer/list', display: 'Customers list' },
     { path: '/order/new', display: 'New order' },
     { path: '/order/list', display: 'Orders list' },
+    { path: '/task/list', display: 'Tasks list' },
 ];
 
 export class HeadingLinks extends Component {

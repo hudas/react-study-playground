@@ -8,8 +8,7 @@ import {CustomerView} from "../../components/view/CustomerView";
 import * as mappers from "../../services/CustomerMappers";
 import {CustomerFormStateValue} from "../update/CustomerUpdatePage";
 
-export interface CustomerViewPageProps extends RouteComponentProps<CustomerViewRouteParams>{
-}
+export type CustomerViewPageProps = RouteComponentProps<CustomerViewRouteParams>;
 
 interface CustomerViewRouteParams {
   id: string;

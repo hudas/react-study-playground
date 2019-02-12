@@ -21,8 +21,7 @@ export function CustomerList({ rows }: CustomerListProps) {
           <TableHead>
               <CustomerListColumnHeadings/>
           </TableHead>
-          <TableBody>{rows.map(row => <CustomerListRow key={row.id} customer={row}/>)}
-          </TableBody>
+          <TableBody>{rows.map(row => <CustomerListRow key={row.id} customer={row}/>)}</TableBody>
       </Table>
     );
 }

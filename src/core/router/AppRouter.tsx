@@ -5,6 +5,7 @@ import {CustomerRouter} from "../../customers/router/CustomerRouter";
 import {NotFound} from "../components/content/not-found/NotFound";
 import React from "react";
 import {OrderRouter} from "../../orders/router/OrderRouter";
+import {TasksRouter} from "../../tasks/router/TasksRouter";
 
 export interface AppRoutedComponentProps extends RouteComponentProps, AppRouterProps {
 
@@ -15,7 +16,7 @@ export interface AppRouterProps {
 }
 
 
-export function AppRouter({ auth }: AppRouterProps) {
+export function AppRouter(routerProps: AppRouterProps) {
   return (
     <Switch>
       <Route
@@ -25,11 +26,15 @@ export function AppRouter({ auth }: AppRouterProps) {
       />
       <Route
         path="/customer"
-        render={(routeProps) => <CustomerRouter auth={auth} {...routeProps}/>}
+        render={(routeProps) => <CustomerRouter {...routerProps} {...routeProps}/>}
       />
       <Route
         path="/order"
-        render={(routeProps) => <OrderRouter auth={auth} {...routeProps}/>}
+        render={(routeProps) => <OrderRouter {...routerProps} {...routeProps}/>}
+      />
+      <Route
+        path="/task"
+        render={(routeProps) => <TasksRouter {...routerProps} {...routeProps}/>}
       />
       <Route
         component={NotFound}

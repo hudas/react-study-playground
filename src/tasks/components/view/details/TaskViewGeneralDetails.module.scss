@@ -1,0 +1,33 @@
+.form-container {
+  display: grid;
+
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(4, 70px);
+  grid-gap: 10px;
+
+  grid-template-areas:
+          "name        status         .         ."
+          "description description description description"
+          "description description description description"
+          "created-at  created-by  .            .";
+
+  .name-field {
+    grid-area: name;
+  }
+
+  .status-field {
+    grid-area: status;
+  }
+
+  .description-field {
+    grid-area: description;
+  }
+
+  .created-by-field {
+    grid-area: created-by;
+  }
+
+  .created-at-field {
+    grid-area: created-at;
+  }
+}

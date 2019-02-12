@@ -1,9 +1,9 @@
 import {Redirect, Route, Switch} from "react-router";
 import * as React from "react";
 import {withGuard} from "../../core/components/content/guard/RouteGuard";
-import {OrderForm} from "../form/OrderForm";
-import {OrderList} from "../list/OrderList";
-import {OrderView} from "../view/OrderView";
+import {OrderForm} from "../pages/form/OrderForm";
+import {OrderList} from "../pages/list/OrderList";
+import {OrderView} from "../pages/view/OrderView";
 import {NotFound} from "../../core/components/content/not-found/NotFound";
 import {AppRoutedComponentProps} from "../../core/router/AppRouter";
 

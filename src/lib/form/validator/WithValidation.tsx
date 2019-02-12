@@ -22,7 +22,6 @@ export function withValidation<T>(WrappedComponent: ComponentType<ValidatedFormP
     };
 
     validationHandler = (value: T): Promise<FormikErrors<T>> => {
-      console.log('is validation running?');
       return this.validateFormValue(value)
         .then((validation: FormikErrors<T>) => {
           // Pretty strange API :)
