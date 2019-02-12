@@ -3,9 +3,9 @@ import {reduceTaskList} from "./tasks/store/list/TaskListReducers";
 import {composeWithDevTools} from "redux-devtools-extension";
 import {TaskListState} from "./tasks/store/list/TaskListState";
 import {taskListMiddleware} from "./tasks/store/list/TaskListMiddleware";
-import {TaskState} from "./tasks/store/view/TaskState";
-import {reduceTask} from "./tasks/store/view/TaskReducers";
-import {taskMiddleware} from "./tasks/store/view/TaskMiddleware";
+import {TaskState} from "./tasks/store/task/TaskState";
+import {reduceTask} from "./tasks/store/task/TaskReducers";
+import {taskMiddleware} from "./tasks/store/task/TaskMiddleware";
 
 export enum ActionStatus {
   REQUEST = 'REQUEST',
@@ -13,7 +13,7 @@ export enum ActionStatus {
   FAILURE = 'FAILURE'
 }
 
-export interface AppAction extends Action {
+export interface RemoteAction extends Action {
   status: ActionStatus;
 }
 

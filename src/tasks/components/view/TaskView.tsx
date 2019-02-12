@@ -2,6 +2,7 @@ import {Moment} from "moment";
 import React from "react";
 import {TaskCommentsView} from "./comments/TaskCommentsView";
 import {TaskViewGeneralDetails} from "./details/TaskViewGeneralDetails";
+import {TaskStatus} from "../../store/task/TaskState";
 
 export interface Task {
   id: string;
@@ -11,7 +12,7 @@ export interface Task {
   createdBy: string;
   comments: TaskComment[];
   resolvedAt?: Moment | null;
-  status: string;
+  status: TaskStatus | null;
 }
 
 export interface TaskComment {

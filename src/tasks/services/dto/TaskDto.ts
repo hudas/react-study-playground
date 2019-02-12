@@ -17,3 +17,7 @@ export interface TaskCommentDto {
   createdAt: Moment;
   createdBy: string;
 }
+
+export interface TaskStatusDto {
+  status: string;
+}

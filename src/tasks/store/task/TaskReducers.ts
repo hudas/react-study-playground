@@ -1,4 +1,4 @@
-import {INITIAL_TASK_STATE, TaskState} from "./TaskState";
+import {INITIAL_TASK_STATE, TaskState, TaskStatus} from "./TaskState";
 import {TaskActions, TaskActionTypes} from "./TaskActions";
 import produce from "immer";
 import {ActionStatus} from "../../../Store";
@@ -12,6 +12,14 @@ export function reduceTask(state: TaskState = INITIAL_TASK_STATE, action: TaskAc
         if (action.status === ActionStatus.SUCCESS) {
           draft.task = action.task as Task;
         }
+        break;
+      case TaskActionTypes.RESOLVE:
+        if (action.status === ActionStatus.SUCCESS) {
+          draft.task.status = TaskStatus.RESOLVED;
+        }
+        break;
+      default:
+        // Do nothing :)
     }
   });
 }

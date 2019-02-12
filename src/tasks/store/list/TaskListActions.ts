@@ -1,4 +1,4 @@
-import {ActionStatus, AppAction} from "../../../Store";
+import {ActionStatus, RemoteAction} from "../../../Store";
 import {TaskRow} from "../../components/list/TaskList";
 
 export type TaskListActions = LoadTaskList;
@@ -7,7 +7,7 @@ export enum TaskListActionTypes {
   LOAD = '[Task.list] LOAD'
 }
 
-export interface LoadTaskList extends AppAction {
+export interface LoadTaskList extends RemoteAction {
   tasks?: TaskRow[];
 }
 
