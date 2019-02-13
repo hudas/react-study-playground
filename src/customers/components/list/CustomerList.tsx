@@ -12,16 +12,24 @@ export interface CustomerRow {
 }
 
 export interface CustomerListProps {
-    rows: CustomerRow[];
+  rows: CustomerRow[];
+  onViewCustomer: (id: string) => void;
 }
 
-export function CustomerList({ rows }: CustomerListProps) {
-    return (
-      <Table>
-          <TableHead>
-              <CustomerListColumnHeadings/>
-          </TableHead>
-          <TableBody>{rows.map(row => <CustomerListRow key={row.id} customer={row}/>)}</TableBody>
-      </Table>
-    );
+export function CustomerList({rows, onViewCustomer}: CustomerListProps) {
+  return (
+    <Table>
+      <TableHead>
+        <CustomerListColumnHeadings/>
+      </TableHead>
+      <TableBody>{rows.map(row =>
+        <CustomerListRow
+          key={row.id}
+          customer={row}
+          onView={onViewCustomer}
+        />
+      )}
+      </TableBody>
+    </Table>
+  );
 }

@@ -2,25 +2,26 @@ import * as React from "react";
 import {ReactNode} from "react";
 import {Typography} from "@material-ui/core";
 import {TablePanel} from "../../../lib/panels/table-panel/TablePanel";
-import * as service from "../../services/CustomerService";
 import {CustomerList, CustomerRow} from "../../components/list/CustomerList";
+import {RouteComponentProps, withRouter} from "react-router";
+import {AppState} from "../../../Store";
+import {getAllCustomers} from "../../store/list/CustomerListSelectors";
+import {loadCustomerList} from "../../store/list/CustomerListActions";
+import {connect} from "react-redux";
 
-interface CustomerListPageState {
-  rows: CustomerRow[];
+export interface CustomerListPageProps extends RouteComponentProps {
+  customers: CustomerRow[];
+  loadList: () => void;
 }
 
-const INITIAL_STATE: CustomerListPageState = {
-  rows: []
-};
+class CustomerListPage extends React.Component<CustomerListPageProps> {
 
-export class CustomerListPage extends React.Component<{}, CustomerListPageState> {
-  constructor(props: any) {
-    super(props);
-    this.state = INITIAL_STATE;
-  }
+  handleCustomerView = (id: string) => {
+    this.props.history.push(`/customer/${id}`);
+  };
 
   componentDidMount() {
-    this.fetchListRows();
+    this.props.loadList();
   }
 
   render(): ReactNode {
@@ -28,15 +29,25 @@ export class CustomerListPage extends React.Component<{}, CustomerListPageState>
       <>
         <Typography variant="headline">Customers</Typography>
         <TablePanel>
-          <CustomerList rows={this.state.rows}/>
+          <CustomerList
+            rows={this.props.customers}
+            onViewCustomer={this.handleCustomerView}
+          />
         </TablePanel>
       </>
     );
   }
-
-  private fetchListRows() {
-    service.getCustomerList()
-      .then((rows: CustomerRow[]) => this.setState({rows: rows}))
-      .catch((error) => console.error(error));
-  }
 }
+
+const mapStateToProps = (state: AppState) => ({
+  customers: getAllCustomers(state)
+});
+
+const mapDispatchToProps = (dispatch: any) => ({
+  loadList: () => dispatch(loadCustomerList())
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withRouter(CustomerListPage));

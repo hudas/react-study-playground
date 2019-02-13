@@ -6,9 +6,10 @@ import React from "react";
 
 export interface CustomerListRowProps {
   customer: CustomerRow;
+  onView: (id: string) => void;
 }
 
-export function CustomerListRow({ customer }: CustomerListRowProps) {
+export function CustomerListRow({customer, onView}: CustomerListRowProps) {
   return (
     <TableRow key={customer.id}>
       <TableCell component="th" scope="row">
@@ -17,9 +18,7 @@ export function CustomerListRow({ customer }: CustomerListRowProps) {
       <TableCell>{customer.address}</TableCell>
       <TableCell>{customer.subscriptions.join('\n')}</TableCell>
       <TableCell>
-        <EmbeddedButton>
-          <Link to={`/customer/${customer.id}`}>View</Link>
-        </EmbeddedButton>
+        <EmbeddedButton onClick={() => onView(customer.id)}>View</EmbeddedButton>
       </TableCell>
     </TableRow>
   );

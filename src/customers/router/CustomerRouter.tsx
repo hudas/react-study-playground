@@ -1,12 +1,9 @@
 import {Redirect, Route, Switch} from "react-router";
 import {withGuard} from "../../core/components/content/guard/RouteGuard";
-import {CustomerList} from "../components/list/CustomerList";
-import {CustomerForm} from "../components/form/CustomerForm";
-import {CustomerView} from "../components/view/CustomerView";
 import {NotFound} from "../../core/components/content/not-found/NotFound";
 import React from "react";
 import {AppRoutedComponentProps} from "../../core/router/AppRouter";
-import {CustomerListPage} from "../pages/list/CustomerListPage";
+import CustomerListPage from "../pages/list/CustomerListPage";
 import {CustomerViewPage} from "../pages/view/CustomerViewPage";
 import {CustomerUpdatePage} from "../pages/update/CustomerUpdatePage";
 

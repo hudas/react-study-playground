@@ -6,6 +6,9 @@ import {taskListMiddleware} from "./tasks/store/list/TaskListMiddleware";
 import {TaskState} from "./tasks/store/task/TaskState";
 import {reduceTask} from "./tasks/store/task/TaskReducers";
 import {taskMiddleware} from "./tasks/store/task/TaskMiddleware";
+import {CustomerListState} from "./customers/store/list/CustomerListState";
+import {reduceCustomerList} from "./customers/store/list/CustomerListReducers";
+import {customerListMiddleware} from "./customers/store/list/CustomerListMiddleware";
 
 export enum ActionStatus {
   REQUEST = 'REQUEST',
@@ -18,6 +21,7 @@ export interface RemoteAction extends Action {
 }
 
 export interface AppState {
+  customerList: CustomerListState;
   taskList: TaskListState;
   task: TaskState;
 }
@@ -25,11 +29,12 @@ export interface AppState {
 export function configureStore(): Store<AppState, Action> {
   try {
     const rootReducer = combineReducers<AppState>({
+      customerList: reduceCustomerList,
       taskList: reduceTaskList,
       task: reduceTask
     });
 
-    const middlewares = [taskListMiddleware, taskMiddleware];
+    const middlewares = [customerListMiddleware, taskListMiddleware, taskMiddleware];
 
     return createStore(rootReducer, composeWithDevTools(applyMiddleware(...middlewares)));;
   } catch (e) {

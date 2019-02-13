@@ -18,10 +18,10 @@ import {isListLoading} from "./TaskListSelectors";
 export const taskListMiddleware = ({ dispatch, getState }: MiddlewareAPI) => (next: Dispatch) => (action: Action) => {
   switch (action.type) {
     case TaskListActionTypes.LOAD:
-      loadTaskList(action as LoadTaskList, getState, dispatch);
+      handleLoadTaskList(action as LoadTaskList, getState, dispatch);
       break;
     case TaskActionTypes.RESOLVE:
-      propagateTaskListItemResolution(action as ResolveTask, dispatch);
+      handleTaskListItemResolution(action as ResolveTask, dispatch);
       break;
     default:
 
@@ -30,7 +30,7 @@ export const taskListMiddleware = ({ dispatch, getState }: MiddlewareAPI) => (ne
   return next(action);
 };
 
-function loadTaskList(action: LoadTaskList, getState: () => AppState, dispatch: any) {
+function handleLoadTaskList(action: LoadTaskList, getState: () => AppState, dispatch: any) {
   if (action.status === ActionStatus.REQUEST && !isListLoading(getState())) {
     getTaskList()
       .then((listDto: TaskListDto[]) => taskListDtoToRow(listDto) as TaskRow[])
@@ -39,7 +39,7 @@ function loadTaskList(action: LoadTaskList, getState: () => AppState, dispatch: 
   }
 }
 
-function propagateTaskListItemResolution(action: ResolveTask, dispatch: any) {
+function handleTaskListItemResolution(action: ResolveTask, dispatch: any) {
   if (action.status === ActionStatus.SUCCESS) {
     dispatch(resolveTaskListItem((action.id)));
   }
