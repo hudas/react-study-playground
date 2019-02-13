@@ -1,22 +1,31 @@
 import React from "react";
-import {reduxForm, Field, FormProps, InjectedFormProps} from "redux-form";
+import {reduxForm, InjectedFormProps} from "redux-form";
+import ProductGeneralDetailsFormSection from "./general-details/ProductGeneralDetailsFormSection";
+import {Moment} from "moment";
 
-function ProductForm({handleSubmit}: InjectedFormProps<{ firstName: string}>) {
+interface ProductFormState {
+  code: string;
+  name: string;
+  validFrom: Moment | null | 'a';
+  validTill: Moment | null;
+  description: String;
+}
+
+const INITIAL_PRODUCT_FORM_STATE: ProductFormState = {
+  code: undefined,
+  name: undefined,
+  validFrom: null,
+  validTill: null,
+  description: undefined
+};
+
+function ProductForm({handleSubmit}: InjectedFormProps<ProductFormState>) {
+  console.log('Rerendering whole form?');
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        <div>
-          <label>First Name</label>
-          <div>
-            <Field
-              name="firstName"
-              component="input"
-              type="text"
-              placeholder="First Name"
-            />
-          </div>
-          <button type="submit">Submit</button>
-        </div>
+        <ProductGeneralDetailsFormSection/>
+        <button type="submit">Submit</button>
       </form>
     </div>
   )
@@ -24,5 +33,6 @@ function ProductForm({handleSubmit}: InjectedFormProps<{ firstName: string}>) {
 
 export default reduxForm({
   form: 'product',
+  initialValues: INITIAL_PRODUCT_FORM_STATE,
   onSubmit: (value: any) => { console.log(value) }
 })(ProductForm);

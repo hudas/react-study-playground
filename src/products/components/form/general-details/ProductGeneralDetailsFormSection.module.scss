@@ -1,0 +1,41 @@
+.form-section-container {
+  display: grid;
+
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(4, 70px);
+  grid-gap: 10px;
+
+  grid-template-areas:
+          "short-code         name   subscription-type  ."
+          "valid-from   valid-till   .             ."
+          "description  description  description   description"
+          "description  description  description   description";
+
+  div {
+    width: 100%;
+  }
+
+  .code-field {
+    grid-area: short-code;
+  }
+
+  .name-field {
+    grid-area: name;
+  }
+
+  .subscription-type-field {
+    grid-area: subscription-type;
+  }
+
+  .description-field {
+    grid-area: description;
+  }
+
+  .valid-from-field {
+    grid-area: valid-from;
+  }
+
+  .valid-till-field {
+    grid-area: valid-till;
+  }
+}
