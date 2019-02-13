@@ -10,7 +10,6 @@
     "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "strict": true,
     "forceConsistentCasingInFileNames": true,
     "module": "esnext",
     "moduleResolution": "node",
@@ -18,10 +17,17 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "preserve",
-    "typeRoots": ["./lib/validators/types", "./node_modules/@types", "./node_modules/moment"]
+    "typeRoots": [
+      "./lib/validators/types",
+      "./node_modules/@types",
+      "./node_modules/moment"
+    ],
+    "strict": false
   },
   "include": [
     "src"
   ],
-  "exclude": ["./lib/validators/types"]
+  "exclude": [
+    "./lib/validators/types"
+  ]
 }

@@ -7,6 +7,8 @@ import {TablePanel} from "../../../lib/panels/table-panel/TablePanel";
 
 export interface TaskListProps {
   rows: TaskRow[];
+  onViewTask: (id: string) => void;
+  onResolveTask: (id: string) => void;
 }
 
 export interface TaskRow {
@@ -17,7 +19,7 @@ export interface TaskRow {
   status: string;
 }
 
-export function TaskList({rows}: TaskListProps) {
+export function TaskList({rows, onViewTask, onResolveTask}: TaskListProps) {
   return (
     <TablePanel>
       <Table>
@@ -25,7 +27,14 @@ export function TaskList({rows}: TaskListProps) {
           <TaskListColumns/>
         </TableHead>
         <TableBody>
-          {rows.map(task => <TaskListRow key={task.id} task={task}/>)}
+          {rows.map(task =>
+            <TaskListRow
+              key={task.id}
+              task={task}
+              onView={onViewTask}
+              onResolve={onResolveTask}
+            />
+            )}
         </TableBody>
       </Table>
     </TablePanel>
