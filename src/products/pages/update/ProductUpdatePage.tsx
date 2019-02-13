@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {ProductForm} from "../../components/form/ProductForm";
+import ProductForm from "../../components/form/ProductForm";
 
 export default class ProductUpdatePage extends Component {
 
