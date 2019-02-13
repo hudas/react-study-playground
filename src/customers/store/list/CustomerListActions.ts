@@ -1,4 +1,3 @@
-import {Action} from "redux";
 import {ActionStatus, RemoteAction} from "../../../Store";
 import {CustomerRow} from "../../components/list/CustomerList";
 

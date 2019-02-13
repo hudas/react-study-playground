@@ -9,6 +9,9 @@ import {taskMiddleware} from "./tasks/store/task/TaskMiddleware";
 import {CustomerListState} from "./customers/store/list/CustomerListState";
 import {reduceCustomerList} from "./customers/store/list/CustomerListReducers";
 import {customerListMiddleware} from "./customers/store/list/CustomerListMiddleware";
+import {CustomerState} from "./customers/store/customer/CustomerState";
+import {reduceCustomer} from "./customers/store/customer/CustomerReducers";
+import {customerMiddleware} from "./customers/store/customer/CustomerMiddleware";
 
 export enum ActionStatus {
   REQUEST = 'REQUEST',
@@ -22,24 +25,26 @@ export interface RemoteAction extends Action {
 
 export interface AppState {
   customerList: CustomerListState;
+  customer: CustomerState;
   taskList: TaskListState;
   task: TaskState;
 }
 
 export function configureStore(): Store<AppState, Action> {
-  try {
-    const rootReducer = combineReducers<AppState>({
-      customerList: reduceCustomerList,
-      taskList: reduceTaskList,
-      task: reduceTask
-    });
+  const rootReducer = combineReducers<AppState>({
+    customerList: reduceCustomerList,
+    customer: reduceCustomer,
+    taskList: reduceTaskList,
+    task: reduceTask
+  });
 
-    const middlewares = [customerListMiddleware, taskListMiddleware, taskMiddleware];
+  const middlewares = [
+    customerListMiddleware,
+    customerMiddleware,
+    taskListMiddleware,
+    taskMiddleware
+  ];
 
-    return createStore(rootReducer, composeWithDevTools(applyMiddleware(...middlewares)));;
-  } catch (e) {
-    console.error(e);
-    throw e;
-  }
+  return createStore(rootReducer, composeWithDevTools(applyMiddleware(...middlewares)));
 }
 

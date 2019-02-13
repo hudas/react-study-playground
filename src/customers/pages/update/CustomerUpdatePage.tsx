@@ -121,7 +121,7 @@ export class CustomerUpdatePage extends Component<CustomerUpdatePageProps, Custo
 
     service.getCustomer(existing)
       .then((customerDto: Partial<CustomerDTO>) => {
-        const loadedFormState = mappers.customerDtoToFormState(customerDto);
+        const loadedFormState = mappers.dtoToCustomer(customerDto);
         this.setLoadedState(loadedFormState);
         this.markStateLoaded();
       });

@@ -2,8 +2,9 @@ import {ConsentSelection} from "../components/form/consents-form/CustomerConsent
 import {CustomerFormStateValue} from "../pages/update/CustomerUpdatePage";
 import {ConsentDTO, CustomerDTO} from "./dto/CustomerUpdateDto";
 import moment from "moment";
+import {Customer} from "../store/customer/CustomerState";
 
-export function customerDtoToFormState(dto: Partial<CustomerDTO>): CustomerFormStateValue {
+export function dtoToCustomer(dto: Partial<CustomerDTO>): Customer {
     return {
       firstName: dto.firstName,
       lastName: dto.lastName,

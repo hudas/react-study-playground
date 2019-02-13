@@ -1,9 +1,9 @@
 import React from 'react';
 import {CustomerGeneralDetailsForm} from "../form/general-details-form/CustomerGeneralDetailsForm";
-import {CustomerFormStateValue} from "../../pages/update/CustomerUpdatePage";
+import {Customer} from "../../store/customer/CustomerState";
 
 export interface CustomerViewProps {
-  customer: Partial<CustomerFormStateValue>;
+  customer: Partial<Customer>;
 }
 
 export function CustomerView({ customer }: CustomerViewProps) {

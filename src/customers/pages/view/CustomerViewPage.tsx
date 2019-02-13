@@ -1,70 +1,53 @@
 import React, {Component, ReactNode} from "react";
-import {getCustomer} from "../../services/CustomerService";
-import {CustomerDTO} from "../../services/dto/CustomerUpdateDto";
-import {Redirect, RouteComponentProps} from "react-router";
+import {RouteComponentProps} from "react-router";
 import {Typography} from "@material-ui/core";
 import {PrimaryButton} from "../../../lib/buttons/PrimaryButton";
 import {CustomerView} from "../../components/view/CustomerView";
-import * as mappers from "../../services/CustomerMappers";
-import {CustomerFormStateValue} from "../update/CustomerUpdatePage";
+import {AppState} from "../../../Store";
+import {getCustomer} from "../../store/customer/CustomerSelectors";
+import {loadCustomer} from "../../store/customer/CustomerActions";
+import {connect} from "react-redux";
+import {Customer} from "../../store/customer/CustomerState";
 
-export type CustomerViewPageProps = RouteComponentProps<CustomerViewRouteParams>;
+export interface CustomerViewPageProps extends RouteComponentProps<CustomerViewRouteParams> {
+  customer: Customer;
+  loadCustomer: (id: string) => void;
+}
 
 interface CustomerViewRouteParams {
   id: string;
 }
 
-interface CustomerViewPageState {
-  value: Partial<CustomerFormStateValue>;
-  redirectToEdit: boolean;
-}
+class CustomerViewPage extends Component<CustomerViewPageProps> {
 
-const INITIAL_STATE: CustomerViewPageState = {
-  value: {
-    firstName: '',
-    lastName: '',
-    birthDate: null,
-    address: ''
-  },
-  redirectToEdit: false
-};
-
-export class CustomerViewPage extends Component<CustomerViewPageProps, CustomerViewPageState> {
-
-  editClickHandler = () => {
-    this.setState({ redirectToEdit: true });
+  handleEdit = (id: string) => {
+    this.props.history.push(`/customer/edit/${id}`);
   };
 
-  constructor(props: any) {
-    super(props);
-    this.state = INITIAL_STATE;
-  }
-
   componentDidMount(): void {
-    this.loadExistingState();
+    this.props.loadCustomer(this.props.match.params.id);
   }
 
   render(): ReactNode {
-    if (this.state.redirectToEdit) {
-      return <Redirect to={`/customer/edit/${this.props.match.params.id}`}/>;
-    }
-
     return (
       <div>
         <Typography variant="headline">Customer</Typography>
-        <CustomerView customer={this.state.value}/>
-        <PrimaryButton onClick={this.editClickHandler}>Edit</PrimaryButton>
+        <CustomerView customer={this.props.customer}/>
+        <PrimaryButton onClick={() => this.handleEdit(this.props.match.params.id)}>Edit</PrimaryButton>
       </div>
     );
   }
-
-  private loadExistingState() {
-    getCustomer(this.props.match.params.id)
-      .then((customer: Partial<CustomerDTO>) => {
-        this.setState({
-          value: mappers.customerDtoToFormState(customer)
-        })
-      })
-      .catch((error) => console.error(error));
-  }
 }
+
+const mapStateToProps = (state: AppState) => ({
+  customer: getCustomer(state)
+});
+
+const mapDispatchToProps = (dispatch: any) => ({
+  loadCustomer: (id: string) => dispatch(loadCustomer(id))
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(CustomerViewPage);
