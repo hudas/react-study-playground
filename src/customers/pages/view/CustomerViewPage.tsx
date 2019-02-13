@@ -5,9 +5,9 @@ import {PrimaryButton} from "../../../lib/buttons/PrimaryButton";
 import {CustomerView} from "../../components/view/CustomerView";
 import {AppState} from "../../../Store";
 import {getCustomer} from "../../store/customer/CustomerSelectors";
-import {loadCustomer} from "../../store/customer/CustomerActions";
 import {connect} from "react-redux";
 import {Customer} from "../../store/customer/CustomerState";
+import {loadCustomer} from "../../store/customer/actions/LoadCustomerAction";
 
 export interface CustomerViewPageProps extends RouteComponentProps<CustomerViewRouteParams> {
   customer: Customer;

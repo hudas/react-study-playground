@@ -3,6 +3,7 @@ import {Moment} from "moment";
 
 export interface CustomerState {
   customer: Customer;
+  updated: boolean;
 }
 
 export interface Customer {
@@ -24,5 +25,6 @@ export const INITIAL_CUSTOMER_VALUE: CustomerState = {
     email: '',
     phone: '',
     consents: {}
-  }
+  },
+  updated: false
 };

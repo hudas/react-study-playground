@@ -1,11 +1,6 @@
-import {ActionStatus, RemoteAction} from "../../../Store";
-import {Customer} from "./CustomerState";
-
-export type CustomerActions = LoadCustomer;
-
-export enum CustomerActionTypes {
-  LOAD = '[Customer] LOAD'
-}
+import {ActionStatus, RemoteAction} from "../../../../Store";
+import {Customer} from "../CustomerState";
+import {CustomerActionTypes} from "./CustomerActions";
 
 export interface LoadCustomer extends RemoteAction {
   readonly type: CustomerActionTypes.LOAD;
@@ -21,7 +16,7 @@ export function loadCustomer(id: string): LoadCustomer {
   }
 }
 
-export function loadCustomerSucceded(id: string, customer: Customer): LoadCustomer {
+export function loadCustomerSucceeded(id: string, customer: Customer): LoadCustomer {
   return {
     type: CustomerActionTypes.LOAD,
     status: ActionStatus.SUCCESS,

@@ -8,13 +8,21 @@ import {
 } from "../../components/form/consents-form/CustomerConsentsField";
 import {Redirect, RouteComponentProps} from "react-router";
 import {Typography} from "@material-ui/core";
-import {CustomerDTO} from "../../services/dto/CustomerUpdateDto";
-import * as mappers from "../../services/CustomerMappers";
-import * as service from "../../services/CustomerService";
 import {CustomerForm} from "../../components/form/CustomerForm";
 import {withValidation} from "../../../lib/form/validator/WithValidation";
+import {AppState} from "../../../Store";
+import {getCustomer, isCustomerUpdated} from "../../store/customer/CustomerSelectors";
+import {connect} from "react-redux";
+import {Customer} from "../../store/customer/CustomerState";
+import {submitCustomer} from "../../store/customer/actions/SubmitCustomerActions";
+import {prepareCustomerForm} from "../../store/customer/actions/PrepareCustomerFormAction";
 
-export type CustomerUpdatePageProps = RouteComponentProps<CustomerUpdatePageRouteParams>;
+export interface CustomerUpdatePageProps extends RouteComponentProps<CustomerUpdatePageRouteParams> {
+  customer: Customer;
+  wasUpdated: boolean;
+  prepareCustomerForm: (id: string) => void;
+  submitCustomer: (id: string, form: Customer) => void;
+}
 
 interface CustomerUpdatePageRouteParams {
   id: string;
@@ -24,47 +32,18 @@ export type CustomerFormStateValue = GeneralDetailsCustomerFormState &
   CustomerContactsFormState &
   CustomerConsentFormState;
 
-export interface CustomerFormState {
-  value: CustomerFormStateValue;
-  updated: boolean;
-  loaded: boolean;
-}
-
-const INITIAL_STATE: CustomerFormState = {
-  value: {
-    firstName: '',
-    lastName: '',
-    birthDate: null,
-    address: '',
-    phone: '',
-    email: '',
-    consents: {}
-  },
-  updated: false,
-  loaded: false
-};
-
-export class CustomerUpdatePage extends Component<CustomerUpdatePageProps, CustomerFormState> {
-
-  constructor(props: CustomerUpdatePageProps) {
-    super(props);
-    this.state = INITIAL_STATE;
-  }
+class CustomerUpdatePage extends Component<CustomerUpdatePageProps> {
 
   submitHandler = (value: CustomerFormStateValue) => {
-    this.updateCustomer(value);
+    this.props.submitCustomer(this.existingCustomerId(), value as Customer);
   };
 
   componentWillMount(): void {
-    this.loadExistingState();
+    this.props.prepareCustomerForm(this.existingCustomerId());
   }
 
   render(): React.ReactNode {
-    if (!this.state.loaded) {
-      return null;
-    }
-
-    if (this.state.updated) {
+    if (this.props.wasUpdated) {
       return <Redirect to="/customer/list"/>
     }
 
@@ -72,10 +51,10 @@ export class CustomerUpdatePage extends Component<CustomerUpdatePageProps, Custo
     return (
       <div>
         <Typography variant="headline" color="primary">
-          {this.existingCustomerId() ? ("Customer  " + this.props.match.params.id) : ("New customer")}
+          {this.existingCustomerId() ? ("Customer  " + this.existingCustomerId()) : ("New customer")}
         </Typography>
         <ValidatedCustomerForm
-          value={this.state.value}
+          value={this.props.customer}
           onSubmit={this.submitHandler}
         />
       </div>
@@ -85,46 +64,19 @@ export class CustomerUpdatePage extends Component<CustomerUpdatePageProps, Custo
   private existingCustomerId() {
     return this.props.match.params.id;
   }
-
-  private updateCustomer(formState: CustomerFormStateValue) {
-    const existingId = this.existingCustomerId();
-    const dto: Partial<CustomerDTO> = mappers.customerFormStateToDto(formState);
-
-    const update = existingId ? service.updateCustomer(existingId, dto) : service.createCustomer(dto);
-
-    update.then(() => this.setState({updated: true}))
-      .catch((error) => console.error(error));
-  }
-
-  private setLoadedState(subFormValue: Partial<CustomerFormStateValue>) {
-    this.setState({
-      value: {
-        ...this.state.value,
-        ...subFormValue
-      }
-    });
-  }
-
-  private markStateLoaded() {
-    this.setState({
-      loaded: true
-    });
-  }
-
-  private loadExistingState() {
-    const existing = this.existingCustomerId();
-
-    if (!existing) {
-      this.markStateLoaded();
-      return;
-    }
-
-    service.getCustomer(existing)
-      .then((customerDto: Partial<CustomerDTO>) => {
-        const loadedFormState = mappers.dtoToCustomer(customerDto);
-        this.setLoadedState(loadedFormState);
-        this.markStateLoaded();
-      });
-  }
-
 }
+
+const mapStateToProps = (state: AppState) => ({
+  customer: getCustomer(state),
+  wasUpdated: isCustomerUpdated(state)
+});
+
+const mapDispatchToProps = (dispatch: any) => ({
+  prepareCustomerForm: (id: string) => dispatch(prepareCustomerForm(id)),
+  submitCustomer: (id: string, form: Customer) => dispatch(submitCustomer(id, form))
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(CustomerUpdatePage);

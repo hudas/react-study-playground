@@ -5,7 +5,7 @@ import React from "react";
 import {AppRoutedComponentProps} from "../../core/router/AppRouter";
 import CustomerListPage from "../pages/list/CustomerListPage";
 import CustomerViewPage from "../pages/view/CustomerViewPage";
-import {CustomerUpdatePage} from "../pages/update/CustomerUpdatePage";
+import CustomerUpdatePage from "../pages/update/CustomerUpdatePage";
 
 export function CustomerRouter({auth, match}: AppRoutedComponentProps) {
   return (
