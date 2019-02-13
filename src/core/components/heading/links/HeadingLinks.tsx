@@ -13,6 +13,7 @@ const navigationRoutes: NavigationRoute[] = [
     { path: '/order/new', display: 'New order' },
     { path: '/order/list', display: 'Orders list' },
     { path: '/task/list', display: 'Tasks list' },
+    { path: '/product/new', display: 'New product' },
 ];
 
 export class HeadingLinks extends Component {

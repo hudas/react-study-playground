@@ -6,6 +6,7 @@ import {NotFound} from "../components/content/not-found/NotFound";
 import React from "react";
 import {OrderRouter} from "../../orders/router/OrderRouter";
 import {TasksRouter} from "../../tasks/router/TasksRouter";
+import {ProductRouter} from "../../products/router/ProductRouter";
 
 export interface AppRoutedComponentProps extends RouteComponentProps, AppRouterProps {
 
@@ -35,6 +36,10 @@ export function AppRouter(routerProps: AppRouterProps) {
       <Route
         path="/task"
         render={(routeProps) => <TasksRouter {...routerProps} {...routeProps}/>}
+      />
+      <Route
+        path="/product"
+        render={(routeProps) => <ProductRouter {...routerProps} {...routeProps}/>}
       />
       <Route
         component={NotFound}
