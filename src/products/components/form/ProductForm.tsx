@@ -3,6 +3,8 @@ import {reduxForm, InjectedFormProps} from "redux-form";
 import ProductGeneralDetailsFormSection from "./general-details/ProductGeneralDetailsFormSection";
 import {Moment} from "moment";
 import {ProductPricingFormSection} from "./pricing/ProductPricingFormSection";
+import {PrimaryButton} from "../../../lib/buttons/PrimaryButton";
+import {EligibilityRulesSelection, ProductEligibilityRules} from "./eligibility-rules/ProductEligibilityRules";
 
 interface ProductFormState {
   code: string;
@@ -13,7 +15,8 @@ interface ProductFormState {
   pricing: {
     oneTime: number | undefined;
     recurring: number | undefined;
-  }
+  },
+  eligibility: EligibilityRulesSelection;
 }
 
 const INITIAL_PRODUCT_FORM_STATE: ProductFormState = {
@@ -25,7 +28,8 @@ const INITIAL_PRODUCT_FORM_STATE: ProductFormState = {
   pricing: {
     oneTime: undefined,
     recurring: undefined
-  }
+  },
+  eligibility: {}
 };
 
 function ProductForm({handleSubmit}: InjectedFormProps<ProductFormState>) {
@@ -35,7 +39,8 @@ function ProductForm({handleSubmit}: InjectedFormProps<ProductFormState>) {
       <form onSubmit={handleSubmit}>
         <ProductGeneralDetailsFormSection/>
         <ProductPricingFormSection/>
-        <button type="submit">Submit</button>
+        <ProductEligibilityRules/>
+        <PrimaryButton type="submit">Submit</PrimaryButton>
       </form>
     </div>
   )
