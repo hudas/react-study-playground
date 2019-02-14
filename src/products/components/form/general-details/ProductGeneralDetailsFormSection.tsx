@@ -25,20 +25,22 @@ export interface ProductGeneralDetailsFormState {
 
 const availableSubscriptionTypes = [{id: "PREPAID", name: "Prepaid"}, {id: "POSTPAID", name: "Postpaid"}];
 
-const formSectionValidationSchema: ObjectSchema<Partial<ProductGeneralDetailsFormState>> = yup.object<Partial<ProductGeneralDetailsFormState>>({
-  code: yup.string()
-    .required(),
-  name: yup.string()
-    .required(),
-  validFrom: yup.mixed()
-    .required(),
-  validTill: yup.mixed()
-    .required(),
-  subscriptionType: yup.mixed()
-    .required()
-});
+
 
 export default function ProductGeneralDetailsFormSection({registerSchema}: ValidatedReduxFormSectionProps<ProductGeneralDetailsFormState>) {
+  const formSectionValidationSchema: ObjectSchema<Partial<ProductGeneralDetailsFormState>> = yup.object<Partial<ProductGeneralDetailsFormState>>({
+    code: yup.string()
+      .required(),
+    name: yup.string()
+      .required(),
+    validFrom: yup.mixed()
+      .required(),
+    validTill: yup.mixed()
+      .required(),
+    subscriptionType: yup.mixed()
+      .required()
+  }).validRangeProperties('validFrom', 'validTill');
+
   registerSchema(formSectionValidationSchema as ObjectSchema<ProductGeneralDetailsFormState>);
 
   return (

@@ -9,5 +9,6 @@ declare module 'yup' {
 
   interface ObjectSchema<T> {
     requiredOneOf(...properties: (keyof T)[]): ObjectSchema<T>;
+    validRangeProperties(fromProperty: string, tillProperty: string): ObjectSchema<T>;
   }
 }

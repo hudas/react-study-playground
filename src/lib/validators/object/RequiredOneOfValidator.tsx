@@ -16,7 +16,7 @@ export const requiredOneOfTest = (schema: ObjectSchema<any>) => {
           return true;
         }
 
-        const allFields = propertyNames.join(' ')
+        const allFields = propertyNames.join(' ');
 
         const fieldErrors: ValidationError[] = propertyNames.map((property) =>
           this.createError({path: property, message: `At least one of fields: ${allFields} is required`})
