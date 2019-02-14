@@ -12,7 +12,8 @@ import {customerListMiddleware} from "./customers/store/list/CustomerListMiddlew
 import {CustomerState} from "./customers/store/customer/CustomerState";
 import {reduceCustomer} from "./customers/store/customer/CustomerReducers";
 import {customerMiddleware} from "./customers/store/customer/CustomerMiddleware";
-import {FormState, FormStateMap, reducer as formReducer} from 'redux-form'
+import {FormStateMap, reducer as formReducer} from 'redux-form'
+import {productMiddleware} from "./products/store/ProductMiddleware";
 
 export enum ActionStatus {
   REQUEST = 'REQUEST',
@@ -45,7 +46,8 @@ export function configureStore(): Store<AppState, Action> {
     customerListMiddleware,
     customerMiddleware,
     taskListMiddleware,
-    taskMiddleware
+    taskMiddleware,
+    productMiddleware
   ];
 
   return createStore(
