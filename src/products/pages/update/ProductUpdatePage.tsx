@@ -1,27 +1,20 @@
 import React from "react";
 import {ProductForm} from "../../components/form/ProductForm";
-import {Moment} from "moment";
 import {
-  EligibilityRulesSelection
+  EligibilityRulesSelection, ProductEligibilityRulesFormState
 } from "../../components/form/eligibility-rules/ProductEligibilityRules";
 import {reduxForm} from "redux-form";
 import {AppState} from "../../../Store";
 import {connect} from "react-redux";
 import {submitProduct} from "../../store/actions/SubmitProductAction";
+import {withReduxFormValidation} from "../../../lib/form/validator/WithReduxFormValidation";
+import {ProductGeneralDetailsFormState} from "../../components/form/general-details/ProductGeneralDetailsFormSection";
+import {
+  ProductPricingFormSectionState
+} from "../../components/form/pricing/ProductPricingFormSection";
 
 
-export interface ProductFormState {
-  code: string;
-  name: string;
-  validFrom: Moment | null;
-  validTill: Moment | null;
-  description: string;
-  pricing: {
-    oneTime: number | undefined;
-    recurring: number | undefined;
-  },
-  eligibility: EligibilityRulesSelection;
-}
+export type ProductFormState = ProductGeneralDetailsFormState & ProductPricingFormSectionState & ProductEligibilityRulesFormState;
 
 const INITIAL_PRODUCT_FORM_STATE: ProductFormState = {
   code: undefined,
@@ -29,6 +22,7 @@ const INITIAL_PRODUCT_FORM_STATE: ProductFormState = {
   validFrom: null,
   validTill: null,
   description: undefined,
+  subscriptionType: undefined,
   pricing: {
     oneTime: undefined,
     recurring: undefined
@@ -36,15 +30,16 @@ const INITIAL_PRODUCT_FORM_STATE: ProductFormState = {
   eligibility: {}
 };
 
-
-const managedProductForm = reduxForm({
+const managedForm = reduxForm({
   form: 'product',
   initialValues: INITIAL_PRODUCT_FORM_STATE,
 })(ProductForm);
+
+const validatedProductForm = withReduxFormValidation(managedForm);
 
 export default connect(
   (state: AppState) => ({}),
   (dispatch: any) => ({
     onSubmit: (value: any) => dispatch(submitProduct(value))
   })
-)(managedProductForm);
+)(validatedProductForm);

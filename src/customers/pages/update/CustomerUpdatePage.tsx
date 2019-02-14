@@ -9,7 +9,7 @@ import {
 import {Redirect, RouteComponentProps} from "react-router";
 import {Typography} from "@material-ui/core";
 import {CustomerForm} from "../../components/form/CustomerForm";
-import {withValidation} from "../../../lib/form/validator/WithValidation";
+import {withFormikValidation} from "../../../lib/form/validator/WithFormikValidation";
 import {AppState} from "../../../Store";
 import {getCustomer, isCustomerUpdated} from "../../store/customer/CustomerSelectors";
 import {connect} from "react-redux";
@@ -47,7 +47,7 @@ class CustomerUpdatePage extends Component<CustomerUpdatePageProps> {
       return <Redirect to="/customer/list"/>
     }
 
-    const ValidatedCustomerForm = withValidation(CustomerForm);
+    const ValidatedCustomerForm = withFormikValidation(CustomerForm);
     return (
       <div>
         <Typography variant="headline" color="primary">

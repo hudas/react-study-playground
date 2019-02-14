@@ -11,7 +11,7 @@ export interface ValidatedFormProps<T> extends FormProps<T> {
   validationRegistrar: (schema: ObjectSchema<Partial<T>>) => void;
 }
 
-export function withValidation<T>(WrappedComponent: ComponentType<ValidatedFormProps<T>>) {
+export function withFormikValidation<T>(WrappedComponent: ComponentType<ValidatedFormProps<T>>) {
 
   return class extends Component<FormProps<T>> {
 
@@ -49,8 +49,7 @@ export function withValidation<T>(WrappedComponent: ComponentType<ValidatedFormP
       return this.validationSchema.validate(value, validationOptions)
         .then(() => Promise.resolve({}))
         .catch((error: ValidationError) => {
-          console.log(error);
-          return Promise.resolve(mappers.objectValidationsToFormErrors<T>(error));
+          return Promise.resolve(mappers.objectValidationsToFormikErrors<T>(error));
         });
     }
   }

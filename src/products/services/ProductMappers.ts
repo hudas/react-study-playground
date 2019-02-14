@@ -3,8 +3,6 @@ import {EligibilityRuleSelectionDto, ProductCreateDto} from "./dto/ProductCreate
 import {EligibilityRulesSelection} from "../components/form/eligibility-rules/ProductEligibilityRules";
 
 export function productToDto(product: ProductFormState): Partial<ProductCreateDto> {
-  console.log('got it???');
-  console.log(product);
   return {
     ...product,
     validFrom: product.validFrom && product.validFrom.toISOString(),

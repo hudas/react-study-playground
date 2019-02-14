@@ -2,21 +2,45 @@ import {Field} from "redux-form";
 import React from "react";
 import {FormPanel} from "../../../../lib/panels/form-panel/FormPanel";
 import style from "./ProductGeneralDetailsFormSection.module.scss";
-import {AppTextInput} from "../../../../lib/form/inputs/AppTextInput";
-import {withReduxFieldProps} from "../../../../lib/redux-form/adapter/ReduxFormPropsAdapter";
-import {AppDateInput} from "../../../../lib/form/inputs/AppDateInput";
-import {AppSelectInput} from "../../../../lib/form/inputs/AppSelectInput";
+import {
+  ValidatedReduxFormSectionProps
+} from "../../../../lib/form/validator/WithReduxFormValidation";
+import {ObjectSchema} from "yup";
+import * as yup from "yup";
+import {Moment} from "moment";
+import {
+  AppReduxFormDateInput,
+  AppReduxFormSelectInput,
+  AppReduxFormTextInput
+} from "../../../../lib/redux-form/inputs/AdaptedReduxFormInputs";
+
+export interface ProductGeneralDetailsFormState {
+  code: string;
+  name: string;
+  validFrom: Moment | null;
+  validTill: Moment | null;
+  description: string;
+  subscriptionType: string;
+}
 
 const availableSubscriptionTypes = [{id: "PREPAID", name: "Prepaid"}, {id: "POSTPAID", name: "Postpaid"}];
 
-const CodeField = withReduxFieldProps(AppTextInput);
-const NameField = withReduxFieldProps(AppTextInput);
-const SubscriptionTypeField = withReduxFieldProps(AppSelectInput);
-const ValidFromField = withReduxFieldProps(AppDateInput);
-const ValidTillField = withReduxFieldProps(AppDateInput);
-const DescriptionField = withReduxFieldProps(AppTextInput);
+const formSectionValidationSchema: ObjectSchema<Partial<ProductGeneralDetailsFormState>> = yup.object<Partial<ProductGeneralDetailsFormState>>({
+  code: yup.string()
+    .required(),
+  name: yup.string()
+    .required(),
+  validFrom: yup.mixed()
+    .required(),
+  validTill: yup.mixed()
+    .required(),
+  subscriptionType: yup.mixed()
+    .required()
+});
 
-export default function ProductGeneralDetailsFormSection() {
+export default function ProductGeneralDetailsFormSection({registerSchema}: ValidatedReduxFormSectionProps<ProductGeneralDetailsFormState>) {
+  registerSchema(formSectionValidationSchema as ObjectSchema<ProductGeneralDetailsFormState>);
+
   return (
     <FormPanel title="General details">
       <div className={style["form-section-container"]}>
@@ -24,7 +48,7 @@ export default function ProductGeneralDetailsFormSection() {
           <Field
             name="code"
             label="Code"
-            component={CodeField}
+            component={AppReduxFormTextInput}
           />
         </div>
 
@@ -32,7 +56,7 @@ export default function ProductGeneralDetailsFormSection() {
           <Field
             name="name"
             label="Name"
-            component={NameField}
+            component={AppReduxFormTextInput}
           />
         </div>
 
@@ -41,7 +65,7 @@ export default function ProductGeneralDetailsFormSection() {
             name="subscriptionType"
             label="Subscription type"
             options={availableSubscriptionTypes}
-            component={SubscriptionTypeField}
+            component={AppReduxFormSelectInput}
           />
         </div>
 
@@ -49,7 +73,7 @@ export default function ProductGeneralDetailsFormSection() {
           <Field
             name="validFrom"
             label="Valid from"
-            component={ValidFromField}
+            component={AppReduxFormDateInput}
           />
         </div>
 
@@ -57,7 +81,7 @@ export default function ProductGeneralDetailsFormSection() {
           <Field
             name="validTill"
             label="Valid till"
-            component={ValidTillField}
+            component={AppReduxFormDateInput}
           />
         </div>
 
@@ -66,7 +90,7 @@ export default function ProductGeneralDetailsFormSection() {
             name="description"
             label="Description"
             lines={5}
-            component={DescriptionField}
+            component={AppReduxFormTextInput}
           />
         </div>
       </div>

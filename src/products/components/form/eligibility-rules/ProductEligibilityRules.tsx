@@ -3,6 +3,12 @@ import {Field} from "redux-form";
 import {FormPanel} from "../../../../lib/panels/form-panel/FormPanel";
 import {AppCheckboxInputOption, AppMultiCheckboxInput} from "../../../../lib/form/inputs/AppMultiCheckboxInput";
 import {withReduxFieldProps} from "../../../../lib/redux-form/adapter/ReduxFormPropsAdapter";
+import {ValidatedReduxFormSectionProps} from "../../../../lib/form/validator/WithReduxFormValidation";
+import * as yup from "yup";
+
+export interface ProductEligibilityRulesFormState {
+  eligibility: EligibilityRulesSelection;
+}
 
 export interface EligibilityRulesSelection {
   [ruleId: string]: boolean;
@@ -16,7 +22,13 @@ const eligibilityRules: AppCheckboxInputOption[] = [
 
 const EligibilityRulesSelection = withReduxFieldProps(AppMultiCheckboxInput);
 
-export function ProductEligibilityRules() {
+export function ProductEligibilityRules({registerSchema}: ValidatedReduxFormSectionProps<ProductEligibilityRulesFormState>) {
+  const formSectionValidationSchema = yup.object<ProductEligibilityRulesFormState>({
+    eligibility: yup.mixed().someSelectionApproved()
+  });
+
+  registerSchema(formSectionValidationSchema);
+
   return (
     <FormPanel title="Eligibility">
       <Field

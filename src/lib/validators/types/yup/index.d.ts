@@ -4,7 +4,7 @@ import * as moment from "moment";
 declare module 'yup' {
   interface MixedSchema {
     inRange(from: moment.Moment, to: moment.Moment): MixedSchema;
-    someConsentsSelected(): MixedSchema;
+    someSelectionApproved(): MixedSchema;
   }
 
   interface ObjectSchema<T> {

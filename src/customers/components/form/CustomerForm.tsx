@@ -7,7 +7,7 @@ import {ConsentSelection, CustomerConsentsField} from "./consents-form/CustomerC
 import {Field, FieldProps, Formik, FormikProps} from "formik";
 import {CustomerContactForm} from "./contacts-form/CustomerContactsForm";
 import {CustomerFormStateValue} from "../../pages/update/CustomerUpdatePage";
-import {ValidatedFormProps} from "../../../lib/form/validator/WithValidation";
+import {ValidatedFormProps} from "../../../lib/form/validator/WithFormikValidation";
 import * as yup from "yup";
 
 export type CustomerFormProps = ValidatedFormProps<CustomerFormStateValue>;
@@ -15,7 +15,7 @@ export type CustomerFormProps = ValidatedFormProps<CustomerFormStateValue>;
 export function CustomerForm({ value, onSubmit, validator, validationRegistrar }: CustomerFormProps) {
   validationRegistrar(
     yup.object({
-      consents: yup.mixed().someConsentsSelected()
+      consents: yup.mixed().someSelectionApproved()
     })
   );
 
