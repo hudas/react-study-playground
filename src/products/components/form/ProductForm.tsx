@@ -2,6 +2,7 @@ import React from "react";
 import {reduxForm, InjectedFormProps} from "redux-form";
 import ProductGeneralDetailsFormSection from "./general-details/ProductGeneralDetailsFormSection";
 import {Moment} from "moment";
+import {ProductPricingFormSection} from "./pricing/ProductPricingFormSection";
 
 interface ProductFormState {
   code: string;
@@ -9,6 +10,10 @@ interface ProductFormState {
   validFrom: Moment | null | 'a';
   validTill: Moment | null;
   description: String;
+  pricing: {
+    oneTime: number | undefined;
+    recurring: number | undefined;
+  }
 }
 
 const INITIAL_PRODUCT_FORM_STATE: ProductFormState = {
@@ -16,7 +21,11 @@ const INITIAL_PRODUCT_FORM_STATE: ProductFormState = {
   name: undefined,
   validFrom: null,
   validTill: null,
-  description: undefined
+  description: undefined,
+  pricing: {
+    oneTime: undefined,
+    recurring: undefined
+  }
 };
 
 function ProductForm({handleSubmit}: InjectedFormProps<ProductFormState>) {
@@ -25,6 +34,7 @@ function ProductForm({handleSubmit}: InjectedFormProps<ProductFormState>) {
     <div>
       <form onSubmit={handleSubmit}>
         <ProductGeneralDetailsFormSection/>
+        <ProductPricingFormSection/>
         <button type="submit">Submit</button>
       </form>
     </div>

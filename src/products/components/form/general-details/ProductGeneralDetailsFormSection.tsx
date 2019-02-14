@@ -17,7 +17,6 @@ const ValidTillField = withReduxFieldProps(AppDateInput);
 const DescriptionField = withReduxFieldProps(AppTextInput);
 
 export default function ProductGeneralDetailsFormSection() {
-  console.log('Rerender?');
   return (
     <FormPanel title="General details">
       <div className={style["form-section-container"]}>
