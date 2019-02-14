@@ -1,5 +1,5 @@
 import React from "react";
-import {Field} from "redux-form";
+import {Field, FormSection} from "redux-form";
 import style from "./ProductPricingFormSection.module.scss";
 import * as yup from "yup";
 import {FormPanel} from "../../../../lib/panels/form-panel/FormPanel";
@@ -28,23 +28,25 @@ export function ProductPricingFormSection({registerSchema}: ValidatedReduxFormSe
 
   return (
     <FormPanel title="Pricing">
-      <div className={style["form-section-container"]}>
-        <div className={style["one-time-field"]}>
-          <Field
-            name="pricing.oneTime"
-            label="One time fee"
-            component={AppReduxFormTextInput}
-          />
-        </div>
+      <FormSection name="pricing">
+        <div className={style["form-section-container"]}>
+          <div className={style["one-time-field"]}>
+            <Field
+              name="oneTime"
+              label="One time fee"
+              component={AppReduxFormTextInput}
+            />
+          </div>
 
-        <div className={style["recurring-field"]}>
-          <Field
-            name="pricing.recurring"
-            label="Recurring fee"
-            component={AppReduxFormTextInput}
-          />
+          <div className={style["recurring-field"]}>
+            <Field
+              name="recurring"
+              label="Recurring fee"
+              component={AppReduxFormTextInput}
+            />
+          </div>
         </div>
-      </div>
+      </FormSection>
     </FormPanel>
   );
 }

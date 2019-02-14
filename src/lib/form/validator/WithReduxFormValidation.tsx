@@ -3,6 +3,7 @@ import {ObjectSchema, ValidateOptions, ValidationError} from "yup";
 import * as yup from "yup";
 import {FormProps} from "../FormProps";
 import {FormErrors} from "redux-form";
+import deepmerge from "deepmerge";
 
 
 export interface ValidatedReduxFormProps<T extends object> {
@@ -52,17 +53,28 @@ export function withReduxFormValidation<T extends object>(WrappedComponent: Comp
     }
 
     private objectValidationsToReduxFormErrors<T>(error: ValidationError): FormErrors<T> {
-      console.log(error);
-      return error.inner.reduce((accumulator: FormErrors<T>, { path, message }: ValidationError) => {
-          return {
-            ...accumulator,
-            [path]: message
-          }
-        },
+      const allFieldErrors = error.inner;
+      return allFieldErrors.reduce((mergedErrorObject: FormErrors<T>, currentError: ValidationError) =>
+        deepmerge(mergedErrorObject, this.mapToNestedErrorObject(currentError)),
         {}
       );
     }
 
+    private mapToNestedErrorObject({path, message}: ValidationError) {
+      return path.split('.').reverse()
+        .reduce((nestedError: any, current: string) => {
+            if (!nestedError) {
+              return {
+                [current]: message
+              }
+            }
 
+            return {
+              [current]: nestedError
+            }
+          },
+          undefined
+        );
+    }
   }
 }

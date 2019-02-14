@@ -1,4 +1,4 @@
-import {FormControl, Input, InputLabel, MenuItem, Select} from "@material-ui/core";
+import {FormControl, FormHelperText, Input, InputLabel, MenuItem, Select} from "@material-ui/core";
 import React, {ChangeEvent} from "react";
 
 export interface AppSelectInputProps {
@@ -7,6 +7,9 @@ export interface AppSelectInputProps {
   value: string;
   onChange: (value: string) => void;
   options: AppSelectInputOption[];
+  valid?: boolean;
+  error?: string;
+  submitFailed: boolean;
 }
 
 export interface AppSelectInputOption {
@@ -14,12 +17,15 @@ export interface AppSelectInputOption {
   name: string;
 }
 
-export function AppSelectInput({name, label, onChange, options, ...compatibleProps}: AppSelectInputProps) {
+export function AppSelectInput({name, label, onChange, options, valid, error, value, submitFailed}: AppSelectInputProps) {
   return (
-    <FormControl margin="normal">
+    <FormControl
+      margin="normal"
+      error={submitFailed && valid === false}
+    >
       <InputLabel>{label}</InputLabel>
       <Select
-        {...compatibleProps}
+        value={value}
         onChange={(event: ChangeEvent<HTMLSelectElement>) => onChange(event.target.value)}
         input={<Input name={name}/>}
       >
@@ -27,6 +33,7 @@ export function AppSelectInput({name, label, onChange, options, ...compatiblePro
           (<MenuItem key={id} value={id}>{name}</MenuItem>)
         )}
       </Select>
+      {submitFailed && <FormHelperText>{error}</FormHelperText>}
     </FormControl>
   );
 }

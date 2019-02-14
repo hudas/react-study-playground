@@ -8,7 +8,6 @@ export const someSelectionApprovedTest = (schema: MixedSchema) => {
     'One of selections is required',
     function (this: any, value: AppMultiCheckboxInputSelection) {
 
-      console.log(value);
       const someSelected = Object.keys(value || {}).some((consentId) => value[consentId]);
 
       if (someSelected) {

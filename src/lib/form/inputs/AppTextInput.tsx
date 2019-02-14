@@ -1,4 +1,4 @@
-import {FormControl, Input, InputLabel} from "@material-ui/core";
+import {FormControl, FormHelperText, Input, InputLabel} from "@material-ui/core";
 import React, {ChangeEvent} from "react";
 
 export interface AppTextInputProps {
@@ -7,18 +7,26 @@ export interface AppTextInputProps {
   value: string;
   onChange: (value: string) => void;
   lines?: number;
+  valid?: boolean;
+  error?: string;
+  submitFailed: boolean;
 }
 
-export function AppTextInput({label, onChange, lines, ...compatibleProps} :AppTextInputProps) {
+export function AppTextInput({label, valid, error, onChange, lines, name, value, submitFailed}: AppTextInputProps) {
   return (
-    <FormControl margin="normal">
+    <FormControl
+      margin="normal"
+      error={submitFailed && valid === false}
+    >
       <InputLabel>{label}</InputLabel>
       <Input
-        {...compatibleProps}
+        name={name}
+        value={value}
         multiline={lines && lines > 1}
         rows={lines || 1}
         onChange={(event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => onChange(event.target.value)}
       />
+      {submitFailed && <FormHelperText>{error}</FormHelperText>}
     </FormControl>
   );
 }

@@ -6,6 +6,9 @@ export interface AppMultiCheckboxInputProps {
   value: AppMultiCheckboxInputSelection;
   onChange: (value: AppMultiCheckboxInputSelection) => void;
   options: AppCheckboxInputOption[];
+  valid?: boolean;
+  error?: string;
+  submitFailed: boolean;
 }
 
 export interface AppMultiCheckboxInputSelection {
@@ -21,6 +24,7 @@ export class AppMultiCheckboxInput extends Component<AppMultiCheckboxInputProps>
   render(): React.ReactNode {
     return (
       <>
+        {this.props.submitFailed && <span>{this.props.error}</span>}
         {this.props.options.map(option => (
           <AppCheckboxInput
             key={option.id}
