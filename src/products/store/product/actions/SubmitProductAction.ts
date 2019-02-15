@@ -1,5 +1,5 @@
-import {ActionStatus, RemoteAction} from "../../../Store";
-import {ProductFormState} from "../../pages/update/ProductUpdatePage";
+import {ActionStatus, RemoteAction} from "../../../../Store";
+import {ProductFormState} from "../../../pages/update/ProductUpdatePage";
 import {ProductActionTypes} from "./ProductActions";
 
 export interface SubmitProduct extends RemoteAction {

@@ -6,7 +6,7 @@ import {
 import {reduxForm} from "redux-form";
 import {AppState} from "../../../Store";
 import {connect} from "react-redux";
-import {submitProduct} from "../../store/actions/SubmitProductAction";
+import {submitProduct} from "../../store/product/actions/SubmitProductAction";
 import {withReduxFormValidation} from "../../../lib/form/validator/WithReduxFormValidation";
 import {ProductGeneralDetailsFormState} from "../../components/form/general-details/ProductGeneralDetailsFormSection";
 import {

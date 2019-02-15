@@ -13,7 +13,10 @@ import {CustomerState} from "./customers/store/customer/CustomerState";
 import {reduceCustomer} from "./customers/store/customer/CustomerReducers";
 import {customerMiddleware} from "./customers/store/customer/CustomerMiddleware";
 import {FormStateMap, reducer as formReducer} from 'redux-form'
-import {productMiddleware} from "./products/store/ProductMiddleware";
+import {productMiddleware} from "./products/store/product/ProductMiddleware";
+import {ProductListState} from "./products/store/list/ProductListState";
+import {reduceProductList} from "./products/store/list/ProductListReducers";
+import {productListMiddleware} from "./products/store/list/ProductListMiddleware";
 
 export enum ActionStatus {
   REQUEST = 'REQUEST',
@@ -30,6 +33,7 @@ export interface AppState {
   customer: CustomerState;
   taskList: TaskListState;
   task: TaskState;
+  productList: ProductListState;
   form: FormStateMap;
 }
 
@@ -39,6 +43,7 @@ export function configureStore(): Store<AppState, Action> {
     customer: reduceCustomer,
     taskList: reduceTaskList,
     task: reduceTask,
+    productList: reduceProductList,
     form: formReducer
   });
 
@@ -47,7 +52,8 @@ export function configureStore(): Store<AppState, Action> {
     customerMiddleware,
     taskListMiddleware,
     taskMiddleware,
-    productMiddleware
+    productMiddleware,
+    productListMiddleware
   ];
 
   return createStore(
