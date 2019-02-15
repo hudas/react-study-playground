@@ -4,9 +4,9 @@ import {RouteComponentProps} from "react-router";
 import {connect} from "react-redux";
 import {AppState} from "../../../Store";
 import {getTask} from "../../store/task/TaskSelectors";
-import {loadTask, resolveTask} from "../../store/task/TaskActions";
 import {PrimaryButton} from "../../../lib/buttons/PrimaryButton";
 import {TaskStatus} from "../../store/task/TaskState";
+import {loadTaskEffect, resolveTaskEffect} from "../../store/task/TaskEffects";
 
 export interface TaskViewPageProps extends RouteComponentProps<TaskViewRouteParams> {
   task: Task;
@@ -43,8 +43,8 @@ const mapStateToProps = (state: AppState) => ({
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-  loadTask: (id: string) => dispatch(loadTask(id)),
-  resolveTask: (id: string) => dispatch(resolveTask(id))
+  loadTask: (id: string) => dispatch(loadTaskEffect(id)),
+  resolveTask: (id: string) => dispatch(resolveTaskEffect(id))
 });
 
 export default connect(

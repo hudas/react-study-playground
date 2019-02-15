@@ -6,13 +6,13 @@ import {PrimaryButton} from "../../../lib/buttons/PrimaryButton";
 import {TaskNotification} from "../../../tasks/components/notification/TaskNotification";
 import {connect} from "react-redux";
 import {AppState} from "../../../Store";
-import {getAllTasks, getOpenTasks} from "../../../tasks/store/list/TaskListSelectors";
-import {loadTaskList} from "../../../tasks/store/list/TaskListActions";
+import {getOpenTasks} from "../../../tasks/store/list/TaskListSelectors";
 import {TaskRow} from "../../../tasks/components/list/TaskList";
-import {Redirect, RouteComponentProps} from "react-router";
+import {RouteComponentProps} from "react-router";
 import {
   withRouter
 } from 'react-router-dom'
+import {loadTaskListEffect} from "../../../tasks/store/list/TaskListEffects";
 
 export interface HeadingProps extends RouteComponentProps {
   openTasks: TaskRow[];
@@ -59,7 +59,7 @@ const mapStateToProps = (state: AppState) => ({
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-  loadTasks: () => dispatch(loadTaskList())
+  loadTasks: () => dispatch(loadTaskListEffect())
 });
 
 export default connect(
