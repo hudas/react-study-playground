@@ -7,7 +7,7 @@ import {AppState} from "../../../Store";
 import {getCustomer} from "../../store/customer/CustomerSelectors";
 import {connect} from "react-redux";
 import {Customer} from "../../store/customer/CustomerState";
-import {loadCustomer} from "../../store/customer/actions/LoadCustomerAction";
+import {loadCustomerEffect} from "../../store/customer/CustomerEffects";
 
 export interface CustomerViewPageProps extends RouteComponentProps<CustomerViewRouteParams> {
   customer: Customer;
@@ -44,7 +44,7 @@ const mapStateToProps = (state: AppState) => ({
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-  loadCustomer: (id: string) => dispatch(loadCustomer(id))
+  loadCustomer: (id: string) => dispatch(loadCustomerEffect(id))
 });
 
 export default connect(

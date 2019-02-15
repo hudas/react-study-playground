@@ -6,6 +6,7 @@ import {Customer} from "../store/customer/CustomerState";
 
 export function dtoToCustomer(dto: Partial<CustomerDTO>): Customer {
     return {
+      id: dto.id,
       firstName: dto.firstName,
       lastName: dto.lastName,
       birthDate: moment(dto.birthDate),

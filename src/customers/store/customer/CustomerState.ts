@@ -7,6 +7,7 @@ export interface CustomerState {
 }
 
 export interface Customer {
+  id: string;
   firstName: string;
   lastName: string;
   birthDate: Moment | null;
@@ -18,6 +19,7 @@ export interface Customer {
 
 export const INITIAL_CUSTOMER_VALUE: CustomerState = {
   customer: {
+    id: undefined,
     firstName: '',
     lastName: '',
     birthDate: null,

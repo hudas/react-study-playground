@@ -8,6 +8,7 @@ import {AppState} from "../../../Store";
 import {getAllCustomers} from "../../store/list/CustomerListSelectors";
 import {loadCustomerList} from "../../store/list/CustomerListActions";
 import {connect} from "react-redux";
+import {loadCustomerListEffect} from "../../store/list/CustomerListEffects";
 
 export interface CustomerListPageProps extends RouteComponentProps {
   customers: CustomerRow[];
@@ -44,7 +45,7 @@ const mapStateToProps = (state: AppState) => ({
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-  loadList: () => dispatch(loadCustomerList())
+  loadList: () => dispatch(loadCustomerListEffect())
 });
 
 export default connect(

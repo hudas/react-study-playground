@@ -14,14 +14,13 @@ import {AppState} from "../../../Store";
 import {getCustomer, isCustomerUpdated} from "../../store/customer/CustomerSelectors";
 import {connect} from "react-redux";
 import {Customer} from "../../store/customer/CustomerState";
-import {submitCustomer} from "../../store/customer/actions/SubmitCustomerActions";
-import {prepareCustomerForm} from "../../store/customer/actions/PrepareCustomerFormAction";
+import {prepareFormEffect, submitCustomerEffect} from "../../store/customer/CustomerEffects";
 
 export interface CustomerUpdatePageProps extends RouteComponentProps<CustomerUpdatePageRouteParams> {
   customer: Customer;
   wasUpdated: boolean;
   prepareCustomerForm: (id: string) => void;
-  submitCustomer: (id: string, form: Customer) => void;
+  submitCustomer: () => void;
 }
 
 interface CustomerUpdatePageRouteParams {
@@ -34,8 +33,10 @@ export type CustomerFormStateValue = GeneralDetailsCustomerFormState &
 
 class CustomerUpdatePage extends Component<CustomerUpdatePageProps> {
 
-  submitHandler = (value: CustomerFormStateValue) => {
-    this.props.submitCustomer(this.existingCustomerId(), value as Customer);
+  submitHandler = () => {
+    // We ignore value, since Redux store is our source of truth, not HTML
+    console.log('Im submitting');
+    this.props.submitCustomer();
   };
 
   componentWillMount(): void {
@@ -72,8 +73,8 @@ const mapStateToProps = (state: AppState) => ({
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-  prepareCustomerForm: (id: string) => dispatch(prepareCustomerForm(id)),
-  submitCustomer: (id: string, form: Customer) => dispatch(submitCustomer(id, form))
+  prepareCustomerForm: (id: string) => dispatch(prepareFormEffect(id)),
+  submitCustomer: () => dispatch(submitCustomerEffect())
 });
 
 export default connect(

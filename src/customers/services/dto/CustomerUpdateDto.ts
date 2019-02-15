@@ -1,5 +1,6 @@
 
 export interface CustomerDTO {
+  id: string;
   firstName: string;
   lastName: string;
   birthDate: string;
