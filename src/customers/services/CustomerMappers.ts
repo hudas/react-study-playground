@@ -1,13 +1,16 @@
+import {ConsentSelection} from "../components/form/consents-form/CustomerConsentsField";
+import {CustomerFormStateValue} from "../pages/update/CustomerUpdatePage";
 import {ConsentDTO, CustomerDTO} from "./dto/CustomerUpdateDto";
-import {CustomerFormStateValue} from "../components/form/CustomerForm";
-import {ConsentSelection} from "../components/form/consents-form/CustomerConsentsForm";
+import moment from "moment";
 
 export function customerDtoToFormState(dto: Partial<CustomerDTO>): CustomerFormStateValue {
     return {
       firstName: dto.firstName,
       lastName: dto.lastName,
-      birthDate: dto.birthDate,
+      birthDate: moment(dto.birthDate),
       address: dto.address,
+      email: '',
+      phone: '',
       consents: customerConsentDtoToFormState(dto.consents || [])
     };
 }
@@ -29,6 +32,10 @@ export function customerFormStateToDto(form: CustomerFormStateValue): Partial<Cu
       allowed: form.consents[key]
     }));
 
-  return {...form, consents: consentsDTO};
+  return {
+    ...form,
+    birthDate: form.birthDate ? form.birthDate.toISOString() : undefined,
+    consents: consentsDTO
+  };
 }
 

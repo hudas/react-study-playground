@@ -1,9 +1,8 @@
-import {Moment} from "moment";
 
 export interface CustomerDTO {
   firstName: string;
   lastName: string;
-  birthDate: Moment | null;
+  birthDate: string;
   address: string;
   consents: ConsentDTO[];
 }

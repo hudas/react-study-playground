@@ -1,128 +1,70 @@
-import React, { Component } from 'react';
-import {Redirect, RouteComponentProps} from "react-router";
-import {Typography} from "@material-ui/core";
+import React from 'react';
 import {PrimaryButton} from "../../../lib/buttons/PrimaryButton";
 import {
     CustomerGeneralDetailsForm,
-    GeneralDetailsCustomerFormState
 } from "./general-details-form/CustomerGeneralDetailsForm";
-import {CustomerConsentFormState, CustomerConsentsForm} from "./consents-form/CustomerConsentsForm";
-import {CustomerDTO} from "../../services/dto/CustomerUpdateDto";
+import {ConsentSelection, CustomerConsentsField} from "./consents-form/CustomerConsentsField";
+import {Field, FieldProps, Formik, FormikProps} from "formik";
+import {CustomerContactForm} from "./contacts-form/CustomerContactsForm";
+import {CustomerFormStateValue} from "../../pages/update/CustomerUpdatePage";
+import {ValidatedFormProps} from "../../../lib/form/validator/WithValidation";
+import * as yup from "yup";
 
-import * as mappers from "../../services/CustomerMappers";
-import * as service from "../../services/CustomerService";
+export type CustomerFormProps = ValidatedFormProps<CustomerFormStateValue>;
 
-interface CustomerFormRouteParams {
-    id: string;
-}
+export function CustomerForm({ value, onSubmit, validator, validationRegistrar }: CustomerFormProps) {
+  validationRegistrar(
+    yup.object({
+      consents: yup.mixed().someConsentsSelected()
+    })
+  );
 
-export type CustomerFormStateValue = GeneralDetailsCustomerFormState & CustomerConsentFormState;
+  return (
+    <Formik
+      initialValues={value}
+      validate={validator}
+      onSubmit={onSubmit}
+      render={
+        ({values, handleSubmit, handleChange, setFieldValue, handleBlur, errors}: FormikProps<CustomerFormStateValue>) => {
 
-export interface CustomerFormState {
-  value: CustomerFormStateValue;
-  updated: boolean;
-}
+          return (
+            <form noValidate onSubmit={handleSubmit}>
+              <CustomerGeneralDetailsForm
+                value={values}
+                errors={errors}
+                handlers={{
+                  handleChange,
+                  handleBlur: handleBlur,
+                  setFieldValue: setFieldValue
+                }}
+                registerSchema={validationRegistrar}
+              />
+              <CustomerContactForm
+                value={values}
+                errors={errors}
+                handlers={{
+                  handleChange
+                }}
+                registerSchema={validationRegistrar}
+              />
+              <Field
+                name="consents"
+                render={({field}: FieldProps) => {
 
-export class CustomerForm extends Component<RouteComponentProps<CustomerFormRouteParams>, CustomerFormState> {
+                  return (
+                    <CustomerConsentsField
+                      value={field.value}
+                      error={errors}
+                      onChange={(value: ConsentSelection) => setFieldValue(field.name, value)}
+                    />
+                  );
+                }}
+              />
 
-  constructor(props: RouteComponentProps<CustomerFormRouteParams>) {
-    super(props);
-    this.initFormState();
-  }
-
-  submitHandler = (event: any) => {
-    this.updateCustomer();
-    event.preventDefault();
-  };
-
-  changeHandler = (subFormValue: Partial<CustomerFormStateValue>) => {
-    this.updateState(subFormValue);
-  };
-
-  componentDidMount(): void {
-    this.loadExistingState();
-  }
-
-  render(): React.ReactNode {
-    const formlabel = this.existingCustomerId() ? (
-      "Customer  " + this.props.match.params.id
-    ) : (
-      "New customer"
-    );
-
-    return (
-      this.state.updated ? (
-        <Redirect to="/customer/list"/>
-        ) : (
-        <div>
-          <Typography variant="headline" color="primary">
-            {formlabel}
-          </Typography>
-          <CustomerGeneralDetailsForm
-            value={this.state.value}
-            onChange={this.changeHandler}
-          />
-          <CustomerConsentsForm
-            value={this.state.value}
-            onChange={this.changeHandler}
-          />
-
-          <form
-            noValidate
-            onSubmit={this.submitHandler}
-          >
-            <PrimaryButton type="submit">Submit</PrimaryButton>
-          </form>
-        </div>
-      )
-    );
-  }
-
-  private existingCustomerId() {
-    return this.props.match.params.id;
-  }
-
-  private updateCustomer() {
-    const existingId = this.existingCustomerId();
-    const dto: Partial<CustomerDTO> = mappers.customerFormStateToDto(this.state.value);
-
-    const update = existingId ? service.updateCustomer(existingId, dto) : service.createCustomer(dto);
-
-    update.then(() => this.setState({updated: true}))
-      .catch((error) => console.error(error));
-  }
-
-  private updateState(subFormValue: Partial<CustomerFormStateValue>) {
-    this.setState({
-      value: {
-        ...this.state.value,
-        ...subFormValue
-      }
-    });
-  }
-
-  private loadExistingState() {
-    const existing = this.existingCustomerId();
-
-    if (existing) {
-      service.getCustomer(existing)
-        .then((customerDto: Partial<CustomerDTO>) => {
-          const loadedFormState = mappers.customerDtoToFormState(customerDto);
-          this.updateState(loadedFormState);
-        });
-    }
-  }
-
-  private initFormState() {
-    this.state = {
-      value: {
-        firstName: '',
-        lastName: '',
-        birthDate: null,
-        address: '',
-        consents: {}
-      },
-      updated: false
-    }
-  }
+              <PrimaryButton type="submit">Submit</PrimaryButton>
+            </form>
+          )
+        }}
+    />
+  );
 }

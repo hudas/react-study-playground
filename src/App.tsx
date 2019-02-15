@@ -8,7 +8,7 @@ import {Login, LoginEvent} from "./core/components/auth/Login";
 import {AppRouter} from "./core/router/AppRouter";
 import {MuiPickersUtilsProvider} from "material-ui-pickers";
 import MomentUtils from "@date-io/moment";
-
+import {registerValidations} from "./lib/validators/CustomValidatorRegistry";
 
 interface AppState {
     auth: AuthState;
@@ -29,6 +29,7 @@ class App extends Component<any, AppState> {
                 role: undefined
             }
         };
+        registerValidations();
     }
 
     loginHandler = (event: LoginEvent) => {
