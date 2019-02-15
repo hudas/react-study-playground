@@ -4,8 +4,8 @@ import {connect} from "react-redux";
 import {AppState} from "../../../Store";
 import {getAllProducts} from "../../store/list/ProductListSelectors";
 import {Dispatch} from "redux";
-import {loadProductList} from "../../store/list/ProductListActions";
 import {RouteComponentProps} from "react-router";
+import {loadProductListEffect} from "../../store/list/ProductListEffects";
 
 export interface ProductListPageProps extends RouteComponentProps{
   products: ProductRow[];
@@ -40,8 +40,8 @@ const mapStateToProps = (state: AppState) => {
     products: getAllProducts(state)
   };
 };
-const mapDispatchToProps = (dispatch: Dispatch) => ({
-  loadProducts: () => dispatch(loadProductList())
+const mapDispatchToProps = (dispatch: any) => ({
+  loadProducts: () => dispatch(loadProductListEffect())
 });
 
 export default connect(

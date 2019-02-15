@@ -4,6 +4,7 @@ import {ProductActionTypes} from "./ProductActions";
 import {ActionTypes} from "redux-form";
 
 export interface LoadProduct extends RemoteAction {
+  readonly type: ProductActionTypes.LOAD;
   id?: string;
   product?: ProductFormState;
 }

@@ -1,16 +1,14 @@
 import {ActionStatus, RemoteAction} from "../../../../Store";
-import {ProductFormState} from "../../../pages/update/ProductUpdatePage";
 import {ProductActionTypes} from "./ProductActions";
 
 export interface SubmitProduct extends RemoteAction {
-  product?: ProductFormState;
+  readonly type: ProductActionTypes.SUBMIT;
 }
 
-export function submitProduct(product: ProductFormState) {
+export function submitProduct() {
   return {
     type: ProductActionTypes.SUBMIT,
-    status: ActionStatus.REQUEST,
-    product
+    status: ActionStatus.REQUEST
   }
 }
 
