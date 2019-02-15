@@ -1,11 +1,11 @@
 import {ProductFormState} from "../pages/update/ProductUpdatePage";
-import {EligibilityRuleSelectionDto, ProductCreateDto} from "./dto/ProductCreateDto";
+import {EligibilityRuleSelectionDto, ProductDto} from "./dto/ProductDto";
 import {EligibilityRulesSelection} from "../components/form/eligibility-rules/ProductEligibilityRules";
 import {ProductListDto} from "./dto/ProductListDto";
 import {ProductRow} from "../components/list/ProductList";
 import moment from "moment";
 
-export function productToDto(product: ProductFormState): Partial<ProductCreateDto> {
+export function productToDto(product: ProductFormState): Partial<ProductDto> {
   return {
     ...product,
     validFrom: product.validFrom && product.validFrom.toISOString(),
@@ -18,6 +18,25 @@ function eligibilitySelectionToDto(eligibility: EligibilityRulesSelection): Elig
   return Object.keys(eligibility)
     .map((ruleId) => ({ ruleId, selected: eligibility[ruleId] }))
 }
+
+export function dtoToProduct(product: Partial<ProductDto>): ProductFormState {
+  return {
+    ...product,
+    validFrom: moment(product.validFrom),
+    validTill: moment(product.validTill),
+    eligibility: dtoToEligibilitySelection(product.eligibility)
+  } as ProductFormState
+}
+
+function dtoToEligibilitySelection(selectionDto: EligibilityRuleSelectionDto[]): EligibilityRulesSelection {
+  return selectionDto.reduce(
+    (accumulator: EligibilityRulesSelection, current: EligibilityRuleSelectionDto) =>
+      ({...accumulator, [current.ruleId]: current.selected}),
+    {}
+  )
+}
+
+
 
 export function productListDtoToRows(listDto: Partial<ProductListDto>[]): Partial<ProductRow>[] {
   return listDto.map(dto => ({

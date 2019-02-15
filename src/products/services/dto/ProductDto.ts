@@ -1,5 +1,5 @@
 
-export interface ProductCreateDto {
+export interface ProductDto {
   code: string;
   name: string;
   validFrom: string;

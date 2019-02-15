@@ -24,6 +24,11 @@ export function ProductRouter({auth, match}: AppRoutedComponentProps) {
         component={withGuard(ProductListPage, ["ADMIN"], auth)}
       />
       <Route
+        exact
+        path={`${match.path}/:id`}
+        component={withGuard(ProductUpdatePage, ["ADMIN"], auth)}
+      />
+      <Route
         component={NotFound}
       />
     </Switch>

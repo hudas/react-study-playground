@@ -1,4 +1,4 @@
-import React from "react";
+import React, {Component} from "react";
 import {ProductForm} from "../../components/form/ProductForm";
 import {
   EligibilityRulesSelection, ProductEligibilityRulesFormState
@@ -12,34 +12,62 @@ import {ProductGeneralDetailsFormState} from "../../components/form/general-deta
 import {
   ProductPricingFormSectionState
 } from "../../components/form/pricing/ProductPricingFormSection";
+import {loadProduct} from "../../store/product/actions/LoadProductAction";
+import {RouteComponentProps} from "react-router";
+import {getProduct} from "../../store/product/ProductSelectors";
 
 
 export type ProductFormState = ProductGeneralDetailsFormState & ProductPricingFormSectionState & ProductEligibilityRulesFormState;
 
-const INITIAL_PRODUCT_FORM_STATE: ProductFormState = {
-  code: undefined,
-  name: undefined,
-  validFrom: null,
-  validTill: null,
-  description: undefined,
-  subscriptionType: undefined,
-  pricing: {
-    oneTime: undefined,
-    recurring: undefined
-  },
-  eligibility: {}
-};
-
-const managedForm = reduxForm({
+const ManagedForm = reduxForm({
   form: 'product',
-  initialValues: INITIAL_PRODUCT_FORM_STATE,
+  enableReinitialize: true
 })(ProductForm);
 
-const validatedProductForm = withReduxFormValidation(managedForm);
+const ValidatedProductForm = withReduxFormValidation(ManagedForm);
+
+export interface ProductUpdatePageProps extends RouteComponentProps<ProductUpdatePageRouteParams> {
+  loadProduct: (id: string) => void;
+  onSubmit: (value: ProductFormState) => void;
+  product: ProductFormState;
+}
+
+interface ProductUpdatePageRouteParams {
+  id: string;
+}
+
+class ProductUpdatePage extends Component<ProductUpdatePageProps> {
+
+  componentDidMount(): void {
+    if (this.existingId()) {
+      this.props.loadProduct(this.existingId());
+    }
+  }
+
+  render(): React.ReactNode {
+    return (
+      <ValidatedProductForm
+        onSubmit={this.props.onSubmit}
+        initialValues={this.props.product}
+      />
+    );
+  }
+
+  private existingId(): string {
+    return this.props.match.params.id
+  }
+}
+
+const mapStateToProps = (state: AppState) => ({
+  product: getProduct(state)
+});
+
+const mapDispatchToProps = (dispatch: any) => ({
+  loadProduct: (id: string) => dispatch(loadProduct(id)),
+  onSubmit: (value: any) => dispatch(submitProduct(value))
+});
 
 export default connect(
-  (state: AppState) => ({}),
-  (dispatch: any) => ({
-    onSubmit: (value: any) => dispatch(submitProduct(value))
-  })
-)(validatedProductForm);
+  mapStateToProps,
+  mapDispatchToProps
+)(ProductUpdatePage);

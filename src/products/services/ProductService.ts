@@ -1,9 +1,14 @@
-import {ProductCreateDto} from "./dto/ProductCreateDto";
+import {ProductDto} from "./dto/ProductDto";
 import {EntityId} from "../../lib/integration/Response";
 import axios, {AxiosResponse} from "axios";
 import {ProductListDto} from "./dto/ProductListDto";
 
-export function createProduct(dto: Partial<ProductCreateDto>): Promise<EntityId> {
+export function getProduct(id: string): Promise<Partial<ProductDto>> {
+  return axios.get(`http://localhost:3000/api/product/${id}`)
+    .then((response: AxiosResponse<ProductDto>) => response.data);
+}
+
+export function createProduct(dto: Partial<ProductDto>): Promise<EntityId> {
   return axios.post("http://localhost:3000/api/product", dto)
     .then((response: AxiosResponse<EntityId>) => response.data);
 }

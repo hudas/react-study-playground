@@ -1,7 +1,6 @@
 import React, {Component, ComponentType} from "react";
 import {ObjectSchema, ValidateOptions, ValidationError} from "yup";
 import * as yup from "yup";
-import {FormProps} from "../FormProps";
 import {FormErrors} from "redux-form";
 import deepmerge from "deepmerge";
 
@@ -15,9 +14,8 @@ export interface ValidatedReduxFormSectionProps<T extends object> {
   registerSchema?: (schema: ObjectSchema<T>) => void;
 }
 
-export function withReduxFormValidation<T extends object>(WrappedComponent: ComponentType<ValidatedReduxFormProps<T> & any>) {
-
-  return class extends Component<FormProps<T>> {
+export function withReduxFormValidation<T extends object>(WrappedComponent: ComponentType<any>) {
+  return class extends Component<any> {
 
     validationSchema: ObjectSchema<Partial<T>> = yup.object<Partial<T>>();
 

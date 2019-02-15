@@ -17,6 +17,8 @@ import {productMiddleware} from "./products/store/product/ProductMiddleware";
 import {ProductListState} from "./products/store/list/ProductListState";
 import {reduceProductList} from "./products/store/list/ProductListReducers";
 import {productListMiddleware} from "./products/store/list/ProductListMiddleware";
+import {ProductState} from "./products/store/product/ProductState";
+import {reduceProductState} from "./products/store/product/ProductReducers";
 
 export enum ActionStatus {
   REQUEST = 'REQUEST',
@@ -34,6 +36,7 @@ export interface AppState {
   taskList: TaskListState;
   task: TaskState;
   productList: ProductListState;
+  product: ProductState;
   form: FormStateMap;
 }
 
@@ -44,6 +47,7 @@ export function configureStore(): Store<AppState, Action> {
     taskList: reduceTaskList,
     task: reduceTask,
     productList: reduceProductList,
+    product: reduceProductState,
     form: formReducer
   });
 
